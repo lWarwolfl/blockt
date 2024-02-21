@@ -8,7 +8,7 @@ interface StoreState {
 
 export const useStore = create(
    persist<StoreState>(
-      (set, get) => ({
+      (set) => ({
          address: '',
          setAddress: (address) => set({ address: address }),
       }),
