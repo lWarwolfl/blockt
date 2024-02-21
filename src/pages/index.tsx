@@ -26,9 +26,7 @@ export default function Home() {
                content="width=device-width, height=device-height, initial-scale=1.0"
             />
          </Head>
-         <main
-            className={`flex min-h-screen flex-col items-center p-6 lg:p-24 ${font.className} h-dvh`}
-         >
+         <main className={`flex flex-col items-center p-6 lg:p-24 ${font.className} h-dvh`}>
             <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">
                <ThemeToggle />
                <div className="pointer-events-none flex place-items-center gap-2 font-mono font-black lg:pointer-events-auto">
