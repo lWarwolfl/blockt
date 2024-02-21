@@ -15,7 +15,13 @@ export default function Home() {
       <>
          <Head>
             <title>BlockT - Welcome To Blockchain World Brought To You By Web3</title>
-            <meta name="viewport" content="width=device-width, height=device-height" />
+            <meta name="description" content="Your website description goes here" />
+            <meta name="keywords" content="your, website, keywords, go, here" />
+            <meta name="author" content="Your Name" />
+            <meta
+               name="viewport"
+               content="width=device-width, height=device-height, initial-scale=1.0"
+            />
          </Head>
          <main
             className={`flex min-h-screen flex-col items-center p-6 lg:p-24 ${font.className} h-dvh`}
@@ -28,6 +34,14 @@ export default function Home() {
             </div>
 
             <ContractForm />
+
+            <div className="flex w-full max-w-5xl items-center justify-center gap-2 text-center font-mono text-sm">
+               Developed by
+               <a href="https://github.com/lWarwolfl" target="_blank" className="flex items-center">
+                  <Icon icon="bxl:github" className="text-lg" />
+                  lWarwolfl
+               </a>
+            </div>
          </main>
       </>
    )
