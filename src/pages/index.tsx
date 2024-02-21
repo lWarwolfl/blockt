@@ -17,7 +17,7 @@ export default function Home() {
             <title>BlockT - Welcome To Blockchain World Brought To You By Web3</title>
             <meta
                name="description"
-               content="My goal is to work with web3 to connect to smart contracts or do transactions on ethereum blockchain in this project"
+               content="My goal is to work with web3 to connect to smart contracts and send transactions on ethereum blockchain in this project"
             />
             <meta name="keywords" content="Sina, Kheiri, BlockT, Web3, Blockchain, Ethereum" />
             <meta name="author" content="Sina Kheiri" />
