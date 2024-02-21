@@ -3,6 +3,7 @@ import { ThemeToggle } from '@/components/utils/ThemeToggle'
 import { Icon } from '@iconify-icon/react'
 import { Poppins } from 'next/font/google'
 import Head from 'next/head'
+import { Roboto } from 'next/font/google'
 
 const font = Poppins({
    subsets: ['latin'],
