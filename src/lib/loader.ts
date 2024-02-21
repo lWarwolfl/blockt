@@ -13,16 +13,36 @@ body {
     overflow-x: hidden;
 }
 
+@media (prefers-color-scheme: dark) {
+    #globalLoader {
+        background-color: hsl(240 10% 3.9%);
+    }
+
+    #globalLoader.loaded {
+        background-color: hsla(240, 10%, 3.9%, 0.4);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    #globalLoader {
+        background-color: hsl(0 0% 100%);
+    }
+
+    #globalLoader.loaded {
+        background-color: hsla(0, 0%, 100%, 0.4);
+    }
+}
+
 html.dark #globalLoader {
     background-color: hsl(240 10% 3.9%);
 }
 
-html.light #globalLoader {
-    background-color: hsl(0 0% 100%);
-}
-
 html.dark #globalLoader.loaded {
     background-color: hsla(240, 10%, 3.9%, 0.4);
+}
+
+html.light #globalLoader {
+    background-color: hsl(0 0% 100%);
 }
 
 html.light #globalLoader.loaded {
