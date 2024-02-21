@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 
 interface StoreState {
    address: string
@@ -14,7 +14,6 @@ export const useStore = create(
       }),
       {
          name: 'blockt',
-         storage: createJSONStorage(() => sessionStorage),
       }
    )
 )
