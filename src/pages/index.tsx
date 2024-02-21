@@ -15,9 +15,12 @@ export default function Home() {
       <>
          <Head>
             <title>BlockT - Welcome To Blockchain World Brought To You By Web3</title>
-            <meta name="description" content="Your website description goes here" />
-            <meta name="keywords" content="your, website, keywords, go, here" />
-            <meta name="author" content="Your Name" />
+            <meta
+               name="description"
+               content="My goal is to work with web3 to connect to smart contracts or do transactions on ethereum blockchain in this project"
+            />
+            <meta name="keywords" content="Sina, Kheiri, BlockT, Web3, Blockchain, Ethereum" />
+            <meta name="author" content="Sina Kheiri" />
             <meta
                name="viewport"
                content="width=device-width, height=device-height, initial-scale=1.0"
