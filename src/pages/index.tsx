@@ -1,5 +1,7 @@
+import { Button } from '@/components/ui/button'
 import { ContractForm } from '@/components/utils/ContractForm'
 import { ThemeToggle } from '@/components/utils/ThemeToggle'
+import { connectWallet } from '@/lib/web3/connectWallet'
 import { Icon } from '@iconify-icon/react'
 import { Poppins } from 'next/font/google'
 import Head from 'next/head'
@@ -28,8 +30,14 @@ export default function Home() {
          </Head>
          <main className={`flex flex-col items-center p-6 lg:p-24 ${font.className} h-dvh`}>
             <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">
-               <ThemeToggle />
-               <div className="pointer-events-none flex place-items-center gap-2 font-mono font-black lg:pointer-events-auto">
+               <div className="inline-flex gap-3">
+                  <ThemeToggle />
+                  <Button onClick={connectWallet}>
+                     Connect Wallet
+                     <Icon icon="ic:outline-bolt" className="-mr-2 ml-1 text-xl" />
+                  </Button>
+               </div>
+               <div className="pointer-events-none flex place-items-center gap-2 font-mono font-black">
                   BlockT <Icon icon="cryptocurrency:etc" className="text-3xl" />
                </div>
             </div>

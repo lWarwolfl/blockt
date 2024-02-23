@@ -23,29 +23,29 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const formSchema = z.object({
-   address: z.string().refine((value) => /^0x[a-fA-F0-9]{40}$/i.test(value), {
-      message: 'Invalid contract address format.',
+   contractAddress: z.string().refine((value) => /^0x[a-fA-F0-9]{40}$/i.test(value), {
+      message: 'Invalid contract contractAddress format.',
    }),
 })
 
 export function ContractForm() {
-   const { address, setAddress } = useStore()
+   const { contractAddress, setAddress } = useStore()
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-         address: '',
+         contractAddress: '',
       },
    })
 
    function onSubmit(values: z.infer<typeof formSchema>) {
-      setAddress(values.address)
+      setAddress(values.contractAddress)
    }
 
    return (
       <Card className="my-auto w-full max-w-96">
          <CardHeader>
-            <CardTitle>Save contract address</CardTitle>
+            <CardTitle>Save contract contractAddress</CardTitle>
             <CardDescription>
                Start working with a smart contract on ethereum blockchain network.
             </CardDescription>
@@ -55,15 +55,18 @@ export function ContractForm() {
                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
                   <FormField
                      control={form.control}
-                     name="address"
+                     name="contractAddress"
                      render={({ field }) => (
                         <FormItem>
                            <FormLabel>Address</FormLabel>
                            <FormControl>
-                              <Input placeholder="Contract address" {...field} />
+                              <Input placeholder="Contract contractAddress" {...field} />
                            </FormControl>
                            <FormDescription>
-                              Current address: {address && address !== '' ? address : 'not set'}
+                              Current contractAddress:{' '}
+                              {contractAddress && contractAddress !== ''
+                                 ? contractAddress
+                                 : 'not set'}
                            </FormDescription>
                            <FormMessage />
                         </FormItem>

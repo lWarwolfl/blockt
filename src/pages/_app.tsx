@@ -2,6 +2,7 @@ import { ThemeProvider } from '@/components/utils/ThemeProvider'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { useEffect } from 'react'
+import toast, { Toaster, resolveValue, useToasterStore } from 'react-hot-toast'
 
 export default function App({ Component, pageProps }: AppProps) {
    useEffect(() => {
@@ -24,8 +25,27 @@ export default function App({ Component, pageProps }: AppProps) {
       }
    }, [])
 
+   const { toasts } = useToasterStore()
+   const TOAST_LIMIT = 3
+   useEffect(() => {
+      toasts
+         .filter((t) => t.visible)
+         .filter((_, i) => i >= TOAST_LIMIT)
+         .forEach((t) => toast.dismiss(t.id))
+   }, [toasts])
+
    return (
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+         <Toaster position="bottom-center" reverseOrder={false}>
+            {(t) => {
+               console.log(t)
+               return (
+                  <div className="w-dvw max-w-md rounded-md border border-solid border-border bg-card/50 p-4 text-sm backdrop-blur-sm">
+                     {resolveValue(t.message, t)}
+                  </div>
+               )
+            }}
+         </Toaster>
          <Component {...pageProps} />
       </ThemeProvider>
    )

@@ -2,15 +2,17 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface StoreState {
-   address: string
-   setAddress: (address: string) => void
+   contractAddress: string
+   walletAddress: string
+   setAddress: (contractAddress: string) => void
 }
 
 export const useStore = create(
    persist<StoreState>(
       (set) => ({
-         address: '',
-         setAddress: (address) => set({ address: address }),
+         contractAddress: '',
+         walletAddress: '',
+         setAddress: (contractAddress) => set({ contractAddress: contractAddress }),
       }),
       {
          name: 'blockt',
