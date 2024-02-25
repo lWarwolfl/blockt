@@ -6,14 +6,14 @@ import { checkIfMetamask } from './checkIfMetamask'
 
 export const useWallet = () => {
    const { setWalletAddress } = useStore()
+   const ethereum = checkIfMetamask()
+   const web3 = new Web3(ethereum)
 
    const connectWallet = async () => {
       try {
-         const ethereum = checkIfMetamask()
          const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })) as string[]
          if (accounts[0]) toast.success(`You successfully connected to MetaMask.`)
-         
-         const web3 = new Web3(ethereum)
+
          const web3Accounts = await web3.eth.getAccounts()
          setWalletAddress(web3Accounts[0])
       } catch (error) {
@@ -21,5 +21,5 @@ export const useWallet = () => {
       }
    }
 
-   return connectWallet
+   return { connectWallet }
 }

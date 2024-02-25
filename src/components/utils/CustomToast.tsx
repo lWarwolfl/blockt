@@ -1,3 +1,4 @@
+import useWindowSmallerThan from '@/lib/useWindowSmallerThan'
 import { Icon } from '@iconify-icon/react'
 import { resolveValue, type Toast } from 'react-hot-toast'
 
@@ -6,8 +7,12 @@ interface Props {
 }
 
 export function CustomToast({ t }: Props) {
+   const isMobile = useWindowSmallerThan(400)
+
    return (
-      <div className="w-dvw max-w-md rounded-md border border-solid border-border bg-card/50 p-4 text-sm backdrop-blur-sm">
+      <div
+         className={`w-dvw max-w-md rounded-md border border-solid border-border bg-card/50 ${isMobile ? 'p-2' : 'p-4'} text-sm backdrop-blur-sm`}
+      >
          {t.type === 'error' && (
             <Icon
                observe={false}
