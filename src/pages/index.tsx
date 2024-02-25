@@ -4,6 +4,7 @@ import CopyToClipboard from '@/components/utils/CopyToClipboard'
 import { ThemeToggle } from '@/components/utils/ThemeToggle'
 import { getErrorMessage } from '@/lib/error'
 import { useStore } from '@/lib/store'
+import useWindowSmallerThan from '@/lib/useWindowSmallerThan'
 import { checkIfMetamask } from '@/lib/web3/checkIfMetamask'
 import { useWallet } from '@/lib/web3/useWallet'
 import { Icon } from '@iconify-icon/react'
@@ -50,6 +51,8 @@ export default function Home() {
       }
    }, [walletAddress, setWalletAddress])
 
+   const isMobile = useWindowSmallerThan(400);
+
    return (
       <>
          <Head>
@@ -70,7 +73,7 @@ export default function Home() {
                <div className="inline-flex gap-3">
                   <ThemeToggle />
                   {walletAddress !== '' ? (
-                     <CopyToClipboard variant="outline" value={walletAddress} chars={20} />
+                     <CopyToClipboard variant="outline" value={walletAddress} chars={isMobile ? 16 : 20} />
                   ) : (
                      <Button onClick={connectWallet}>
                         Connect Wallet
