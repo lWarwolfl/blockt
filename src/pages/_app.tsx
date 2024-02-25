@@ -1,8 +1,9 @@
+import { CustomToast } from '@/components/utils/CustomToast'
 import { ThemeProvider } from '@/components/utils/ThemeProvider'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { useEffect } from 'react'
-import toast, { Toaster, resolveValue, useToasterStore } from 'react-hot-toast'
+import toast, { Toaster, useToasterStore } from 'react-hot-toast'
 
 export default function App({ Component, pageProps }: AppProps) {
    useEffect(() => {
@@ -38,12 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
          <Toaster position="bottom-center" reverseOrder={false}>
             {(t) => {
-               console.log(t)
-               return (
-                  <div className="w-dvw max-w-md rounded-md border border-solid border-border bg-card/50 p-4 text-sm backdrop-blur-sm">
-                     {resolveValue(t.message, t)}
-                  </div>
-               )
+               return <CustomToast t={t} />
             }}
          </Toaster>
          <Component {...pageProps} />

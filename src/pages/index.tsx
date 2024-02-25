@@ -1,10 +1,17 @@
 import { Button } from '@/components/ui/button'
 import { ContractForm } from '@/components/utils/ContractForm'
+import CopyToClipboard from '@/components/utils/CopyToClipboard'
 import { ThemeToggle } from '@/components/utils/ThemeToggle'
-import { connectWallet } from '@/lib/web3/connectWallet'
+import { getErrorMessage } from '@/lib/error'
+import { useStore } from '@/lib/store'
+import { checkIfMetamask } from '@/lib/web3/checkIfMetamask'
+import { useWallet } from '@/lib/web3/useWallet'
 import { Icon } from '@iconify-icon/react'
 import { Poppins } from 'next/font/google'
 import Head from 'next/head'
+import { useEffect } from 'react'
+import toast from 'react-hot-toast'
+import Web3 from 'web3'
 
 const font = Poppins({
    subsets: ['latin'],
@@ -13,6 +20,36 @@ const font = Poppins({
 })
 
 export default function Home() {
+   const { walletAddress, setWalletAddress } = useStore()
+   const connectWallet = useWallet()
+
+   useEffect(() => {
+      const ethereum = checkIfMetamask()
+      const web3 = new Web3(ethereum)
+
+      const checkWallet = async () => {
+         try {
+            const accounts = await web3.eth.getAccounts()
+            if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0])
+               setWalletAddress('')
+         } catch (error) {
+            toast.error(getErrorMessage(error))
+         }
+      }
+
+      checkWallet()
+
+      ethereum.on('accountsChanged', async function () {
+         const accounts = await web3.eth.getAccounts()
+         if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0])
+            setWalletAddress('')
+      })
+
+      return () => {
+         ethereum.removeAllListeners('accountsChanged')
+      }
+   }, [walletAddress, setWalletAddress])
+
    return (
       <>
          <Head>
@@ -32,10 +69,14 @@ export default function Home() {
             <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">
                <div className="inline-flex gap-3">
                   <ThemeToggle />
-                  <Button onClick={connectWallet}>
-                     Connect Wallet
-                     <Icon icon="ic:outline-bolt" className="-mr-2 ml-1 text-xl" />
-                  </Button>
+                  {walletAddress !== '' ? (
+                     <CopyToClipboard variant="outline" value={walletAddress} chars={20} />
+                  ) : (
+                     <Button onClick={connectWallet}>
+                        Connect Wallet
+                        <Icon icon="ic:outline-bolt" className="-mr-2 ml-1 text-xl" />
+                     </Button>
+                  )}
                </div>
                <div className="pointer-events-none flex place-items-center gap-2 font-mono font-black">
                   BlockT <Icon icon="cryptocurrency:etc" className="text-3xl" />

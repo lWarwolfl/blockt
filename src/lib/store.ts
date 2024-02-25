@@ -4,7 +4,8 @@ import { persist } from 'zustand/middleware'
 interface StoreState {
    contractAddress: string
    walletAddress: string
-   setAddress: (contractAddress: string) => void
+   setContractAddress: (contractAddress: string) => void
+   setWalletAddress: (walletAddress: string) => void
 }
 
 export const useStore = create(
@@ -12,7 +13,8 @@ export const useStore = create(
       (set) => ({
          contractAddress: '',
          walletAddress: '',
-         setAddress: (contractAddress) => set({ contractAddress: contractAddress }),
+         setContractAddress: (contractAddress) => set({ contractAddress: contractAddress }),
+         setWalletAddress: (walletAddress) => set({ walletAddress: walletAddress }),
       }),
       {
          name: 'blockt',

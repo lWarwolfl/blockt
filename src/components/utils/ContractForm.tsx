@@ -29,7 +29,7 @@ const formSchema = z.object({
 })
 
 export function ContractForm() {
-   const { contractAddress, setAddress } = useStore()
+   const { contractAddress, setContractAddress } = useStore()
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
@@ -39,7 +39,7 @@ export function ContractForm() {
    })
 
    function onSubmit(values: z.infer<typeof formSchema>) {
-      setAddress(values.contractAddress)
+      setContractAddress(values.contractAddress)
    }
 
    return (
@@ -63,7 +63,7 @@ export function ContractForm() {
                               <Input placeholder="Contract contractAddress" {...field} />
                            </FormControl>
                            <FormDescription>
-                              Current contractAddress:{' '}
+                              Current address:{' '}
                               {contractAddress && contractAddress !== ''
                                  ? contractAddress
                                  : 'not set'}
