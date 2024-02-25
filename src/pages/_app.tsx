@@ -3,7 +3,11 @@ import { ThemeProvider } from '@/components/utils/ThemeProvider'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { useEffect } from 'react'
-import toast, { Toaster, useToasterStore } from 'react-hot-toast'
+import dynamic from 'next/dynamic'
+
+const Toaster = dynamic(() => import('react-hot-toast').then((module) => module.Toaster), {
+   ssr: false,
+})
 
 export default function App({ Component, pageProps }: AppProps) {
    useEffect(() => {
@@ -25,15 +29,6 @@ export default function App({ Component, pageProps }: AppProps) {
          }, 1600)
       }
    }, [])
-
-   const { toasts } = useToasterStore()
-   const TOAST_LIMIT = 3
-   useEffect(() => {
-      toasts
-         .filter((t) => t.visible)
-         .filter((_, i) => i >= TOAST_LIMIT)
-         .forEach((t) => toast.dismiss(t.id))
-   }, [toasts])
 
    return (
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
