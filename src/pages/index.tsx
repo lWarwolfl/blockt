@@ -43,7 +43,7 @@ export default function Home() {
          const accounts = await web3.eth.getAccounts()
          if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0]) {
             setWalletAddress('')
-            toast.success('You disconnected from MetaMask')
+            toast.success('You successfully disconnected from MetaMask')
          }
       })
 
