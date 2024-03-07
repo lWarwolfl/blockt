@@ -2,11 +2,11 @@ import toast from 'react-hot-toast'
 import Web3 from 'web3'
 import { getErrorMessage } from '../error'
 import { useStore } from '../store'
-import { checkIfMetamask } from './checkIfMetamask'
+import { checkMetamask } from './checkMetamask'
 
 export const useWallet = () => {
    const { setWalletAddress } = useStore()
-   const ethereum = checkIfMetamask()
+   const ethereum = checkMetamask()
    const web3 = new Web3(ethereum)
 
    const connectWallet = async () => {

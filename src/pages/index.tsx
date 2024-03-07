@@ -4,7 +4,7 @@ import CopyToClipboard from '@/components/utils/CopyToClipboard'
 import { ThemeToggle } from '@/components/utils/ThemeToggle'
 import { getErrorMessage } from '@/lib/error'
 import { useStore } from '@/lib/store'
-import { checkIfMetamask } from '@/lib/web3/checkIfMetamask'
+import { checkMetamask } from '@/lib/web3/checkMetamask'
 import { useWallet } from '@/lib/web3/useWallet'
 import { Icon } from '@iconify-icon/react'
 import { Poppins } from 'next/font/google'
@@ -24,7 +24,7 @@ export default function Home() {
    const { connectWallet } = useWallet()
 
    useEffect(() => {
-      const ethereum = checkIfMetamask()
+      const ethereum = checkMetamask()
       const web3 = new Web3(ethereum)
 
       const checkWallet = async () => {
