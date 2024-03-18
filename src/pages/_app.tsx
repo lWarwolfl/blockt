@@ -2,8 +2,8 @@ import { CustomToast } from '@/components/utils/CustomToast'
 import { ThemeProvider } from '@/components/utils/ThemeProvider'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { useEffect } from 'react'
 import dynamic from 'next/dynamic'
+import { useEffect } from 'react'
 
 const Toaster = dynamic(() => import('react-hot-toast').then((module) => module.Toaster), {
    ssr: false,

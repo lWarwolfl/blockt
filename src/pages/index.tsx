@@ -2,9 +2,10 @@ import { Button } from '@/components/ui/button'
 import { ContractForm } from '@/components/utils/ContractForm'
 import CopyToClipboard from '@/components/utils/CopyToClipboard'
 import { ThemeToggle } from '@/components/utils/ThemeToggle'
+import { WalletDownload } from '@/components/utils/WalletDownload'
 import { getErrorMessage } from '@/lib/error'
 import { useStore } from '@/lib/store'
-import { checkMetamask } from '@/lib/web3/checkMetamask'
+import { checkProvider } from '@/lib/web3/checkProvider'
 import { useWallet } from '@/lib/web3/useWallet'
 import { Icon } from '@iconify-icon/react'
 import { Poppins } from 'next/font/google'
@@ -20,37 +21,43 @@ const font = Poppins({
 })
 
 export default function Home() {
-   const { walletAddress, setWalletAddress } = useStore()
+   const { walletAddress, setWalletAddress, metamask, setMetamask } = useStore()
    const { connectWallet } = useWallet()
+   const { checkMetamask } = checkProvider()
+   const ethereum = checkMetamask()
 
    useEffect(() => {
-      const ethereum = checkMetamask()
-      const web3 = new Web3(ethereum)
+      if (ethereum) {
+         setMetamask(true)
+         const web3 = new Web3(ethereum)
 
-      const checkWallet = async () => {
-         try {
+         const checkWallet = async () => {
+            try {
+               const accounts = await web3.eth.getAccounts()
+               if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0])
+                  setWalletAddress('')
+            } catch (error) {
+               toast.error(getErrorMessage(error))
+            }
+         }
+
+         checkWallet()
+
+         ethereum.on('accountsChanged', async function () {
             const accounts = await web3.eth.getAccounts()
-            if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0])
+            if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0]) {
                setWalletAddress('')
-         } catch (error) {
-            toast.error(getErrorMessage(error))
+               toast.success('You successfully disconnected from MetaMask')
+            }
+         })
+
+         return () => {
+            ethereum.removeAllListeners('accountsChanged')
          }
+      } else {
+         setMetamask(false)
       }
-
-      checkWallet()
-
-      ethereum.on('accountsChanged', async function () {
-         const accounts = await web3.eth.getAccounts()
-         if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0]) {
-            setWalletAddress('')
-            toast.success('You successfully disconnected from MetaMask')
-         }
-      })
-
-      return () => {
-         ethereum.removeAllListeners('accountsChanged')
-      }
-   }, [walletAddress, setWalletAddress])
+   }, [walletAddress, setWalletAddress, ethereum, setMetamask])
 
    return (
       <>
@@ -75,9 +82,9 @@ export default function Home() {
                   {walletAddress !== '' ? (
                      <CopyToClipboard variant="outline" value={walletAddress} chars={20} />
                   ) : (
-                     <Button onClick={connectWallet}>
+                     <Button className="gap-1.5" onClick={connectWallet} disabled={!metamask}>
                         Connect Wallet
-                        <Icon icon="ic:outline-bolt" className="-mr-2 ml-1 text-xl" />
+                        <Icon icon="ic:outline-bolt" className="-mr-2 text-xl" />
                      </Button>
                   )}
                </div>
@@ -87,7 +94,7 @@ export default function Home() {
                </div>
             </div>
 
-            <ContractForm />
+            {metamask ? <ContractForm /> : <WalletDownload />}
 
             <div className="flex items-center gap-2">
                <div className="pointer-events-none flex place-items-center gap-2 font-mono text-sm font-black sm:hidden">

@@ -75,8 +75,8 @@ export function ContractForm() {
                </form>
             </Form>
          </CardContent>
-         <CardFooter className="flex justify-between">
-            <Button onClick={form.handleSubmit(onSubmit)} type="submit" className="mt-2">
+         <CardFooter className="flex justify-between pt-2">
+            <Button onClick={form.handleSubmit(onSubmit)} type="submit">
                Confirm
             </Button>
          </CardFooter>
