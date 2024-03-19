@@ -2,7 +2,7 @@ import { getErrorMessage } from '@/lib/error'
 import { Icon } from '@iconify-icon/react'
 import React, { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import { Button, type ButtonProps } from '../ui/button' // Assuming ButtonProps is imported correctly
+import { Button, type ButtonProps } from '@/components/ui/button' // Assuming ButtonProps is imported correctly
 
 interface Props extends ButtonProps {
    chars?: number

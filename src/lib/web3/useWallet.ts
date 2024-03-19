@@ -1,8 +1,8 @@
+import { getErrorMessage } from '@/lib/error'
+import { useStore } from '@/lib/store'
+import { checkProvider } from '@/lib/web3/checkProvider'
 import toast from 'react-hot-toast'
 import Web3 from 'web3'
-import { getErrorMessage } from '../error'
-import { useStore } from '../store'
-import { checkProvider } from './checkProvider'
 
 export const useWallet = () => {
    const { setWalletAddress } = useStore()
