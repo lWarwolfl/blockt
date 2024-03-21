@@ -21,12 +21,12 @@ export default function App({ Component, pageProps }: AppProps) {
          setTimeout(() => {
             const loader = document.getElementById('globalLoader')
             if (loader) loader.style.opacity = '0'
-         }, 1300)
+         }, 700)
 
          setTimeout(() => {
             const loader = document.getElementById('globalLoader')
             if (loader) loader.style.display = 'none'
-         }, 1600)
+         }, 1000)
       }
    }, [])
 

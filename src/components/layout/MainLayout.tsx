@@ -33,8 +33,8 @@ export default function MainLayout({ children }: Props) {
          const checkWallet = async () => {
             try {
                const accounts = await web3.eth.getAccounts()
-               if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0])
-                  setWalletAddress('')
+               if (accounts[0]) setWalletAddress(accounts[0])
+               else setWalletAddress('')
             } catch (error) {
                toast.error(getErrorMessage(error))
             }
