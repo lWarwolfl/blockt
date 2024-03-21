@@ -1,7 +1,7 @@
-import { type ExternalProvider } from '@ethersproject/providers'
+import { type MetaMaskEthereumProvider } from '@/lib/interfaces'
 
 declare global {
    interface Window {
-      ethereum?: ExternalProvider
+      ethereum?: MetaMaskEthereumProvider
    }
 }

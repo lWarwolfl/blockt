@@ -43,10 +43,15 @@ export default function MainLayout({ children }: Props) {
          checkWallet()
 
          ethereum.on('accountsChanged', async function () {
-            const accounts = await web3.eth.getAccounts()
-            if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0]) {
-               setWalletAddress('')
-               toast.success('You successfully disconnected from MetaMask')
+            try {
+               const accounts = await web3.eth.getAccounts()
+
+               if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0]) {
+                  setWalletAddress('')
+                  toast.success('You successfully disconnected from MetaMask')
+               }
+            } catch (error) {
+               toast.error(getErrorMessage(error))
             }
          })
 
@@ -55,6 +60,7 @@ export default function MainLayout({ children }: Props) {
          }
       } else {
          setMetamask(false)
+         setWalletAddress('')
       }
    }, [walletAddress, setWalletAddress, ethereum, setMetamask])
 

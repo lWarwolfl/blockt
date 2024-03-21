@@ -29,7 +29,7 @@ export function WalletDownload() {
                <Link
                   className="flex items-center gap-1.5"
                   target="_blank"
-                  href="https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn/"
+                  href="https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn"
                >
                   Chrome Browser
                   <Icon icon="bxl:chrome" className="-mr-2 text-xl" />
