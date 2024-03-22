@@ -19,7 +19,7 @@ export const useWallet = () => {
                const web3Accounts = await web3.eth.getAccounts()
                setWalletAddress(web3Accounts[0])
             } else {
-               toast.success(`You don't have any available account.`)
+               toast.error(`You don't have any available accounts.`)
             }
          }
       } catch (error) {
@@ -27,5 +27,23 @@ export const useWallet = () => {
       }
    }
 
-   return { connectWallet }
+   const disconnectWallet = async () => {
+      try {
+         const ethereum = checkMetamask()
+         if (ethereum) {
+            await ethereum.request({
+               method: 'wallet_revokePermissions',
+               params: [
+                  {
+                     eth_accounts: {},
+                  },
+               ],
+            })
+         }
+      } catch (error) {
+         toast.error(getErrorMessage(error))
+      }
+   }
+
+   return { connectWallet, disconnectWallet }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function useWindowSmallerThan(size: number) {
+export default function useWindowSize(size: number) {
    const [value, setValue] = React.useState(false)
 
    React.useEffect(() => {
