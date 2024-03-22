@@ -4,7 +4,7 @@ import CustomHead from '@/components/utils/CustomHead'
 import { WalletDownload } from '@/components/utils/WalletDownload'
 import { getErrorMessage } from '@/lib/error'
 import { useStore } from '@/lib/store'
-import { checkProvider } from '@/lib/web3/checkProvider'
+import { getMetamask } from '@/lib/web3/provider'
 import { Poppins } from 'next/font/google'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
@@ -22,45 +22,39 @@ interface Props {
 
 export default function MainLayout({ children }: Props) {
    const { walletAddress, setWalletAddress, metamask, setMetamask } = useStore()
-   const { checkMetamask } = checkProvider()
-   const ethereum = checkMetamask()
+   const ethereum = getMetamask()
 
    useEffect(() => {
       if (ethereum) {
          setMetamask(true)
+         
          const web3 = new Web3(ethereum)
 
-         const checkWallet = async () => {
+         const handleAccountChange = async () => {
             try {
                const accounts = await web3.eth.getAccounts()
-               if (accounts[0]) setWalletAddress(accounts[0])
-               else setWalletAddress('')
-            } catch (error) {
-               toast.error(getErrorMessage(error))
-            }
-         }
-
-         checkWallet()
-
-         ethereum.on('accountsChanged', async function () {
-            try {
-               const accounts = await web3.eth.getAccounts()
-
-               if (walletAddress && walletAddress !== '' && walletAddress !== accounts[0]) {
+               if (accounts[0]) {
+                  setWalletAddress(accounts[0])
+               } else if (walletAddress !== '') {
                   setWalletAddress('')
                   toast.success('You successfully disconnected from MetaMask')
                }
             } catch (error) {
                toast.error(getErrorMessage(error))
             }
-         })
+         }
+
+         handleAccountChange()
+
+         ethereum.on('accountsChanged', handleAccountChange)
 
          return () => {
-            ethereum.removeAllListeners('accountsChanged')
+            ethereum.removeListener('accountsChanged', handleAccountChange)
          }
       } else {
          setMetamask(false)
          setWalletAddress('')
+         toast.error('MetaMask is not installed.')
       }
    }, [walletAddress, setWalletAddress, ethereum, setMetamask])
 

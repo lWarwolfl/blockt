@@ -13,5 +13,5 @@ export interface MetaMaskProvider {
 
 export interface EthereumProvider extends MetaMaskProvider {
    isTronLink: boolean
-   providers?: EthereumProvider[]
+   providers?: MetaMaskProvider[]
 }

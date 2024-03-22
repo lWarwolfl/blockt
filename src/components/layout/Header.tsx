@@ -2,12 +2,11 @@ import { Button } from '@/components/ui/button'
 import CopyToClipboard from '@/components/utils/CopyToClipboard'
 import { ThemeToggle } from '@/components/utils/ThemeToggle'
 import { useStore } from '@/lib/store'
-import { useWallet } from '@/lib/web3/useWallet'
+import { connectWallet, disconnectWallet } from '@/lib/web3/wallet'
 import { Icon } from '@iconify-icon/react'
 
 export default function Header() {
    const { walletAddress, metamask } = useStore()
-   const { connectWallet, disconnectWallet } = useWallet()
 
    return (
       <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">
