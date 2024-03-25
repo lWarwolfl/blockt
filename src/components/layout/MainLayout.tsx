@@ -27,7 +27,7 @@ export default function MainLayout({ children }: Props) {
    useEffect(() => {
       if (ethereum) {
          setMetamask(true)
-         
+
          const web3 = new Web3(ethereum)
 
          const handleAccountChange = async () => {

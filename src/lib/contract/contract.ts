@@ -1,10 +1,10 @@
 import { VendingmachineAddress, vendingMachineABI } from '@/lib/contract/data'
+import { web3provider } from '@/lib/web3/provider'
 import Web3 from 'web3'
 
-const provider = new Web3.providers.HttpProvider(
-   'https://sepolia.infura.io/v3/212d1693254640c2a54709133b3dc68a'
-)
+const web3 = new Web3(web3provider)
 
-const web3 = new Web3(provider)
-
-export const contract = new web3.eth.Contract(vendingMachineABI, VendingmachineAddress)
+export const contract = new web3.eth.Contract(vendingMachineABI, VendingmachineAddress, {
+   gasPrice: '20000000000',
+   gas: '1000000',
+})

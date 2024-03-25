@@ -17,10 +17,11 @@ import {
    FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import getVendingMachineBalance from '@/lib/methods/getVendingMachineBalance'
 import { useStore } from '@/lib/store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify-icon/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -51,6 +52,19 @@ export function DonutForm() {
       setTotalCost(cost)
    })
 
+   const [vendingMachineBalance, setVendingMachineBalance] = useState<number>(0)
+
+   useEffect(() => {
+      async function fetchInitialData() {
+         if (metamask) {
+            const donutCount = await getVendingMachineBalance()
+            setVendingMachineBalance(Number(donutCount))
+         }
+      }
+
+      fetchInitialData()
+   }, [metamask])
+
    return (
       <Card className="my-auto w-full max-w-96">
          <CardHeader>
@@ -58,7 +72,9 @@ export function DonutForm() {
                <Icon icon="solar:donut-line-duotone" className="mr-1 align-middle text-2xl" />
                Donut Vending Machine
             </CardTitle>
-            <CardDescription>Remaining donuts in the machine</CardDescription>
+            <CardDescription>
+               {vendingMachineBalance} Remaining donuts in the machine
+            </CardDescription>
          </CardHeader>
          <CardContent className="-mt-2">
             <Form {...form}>
@@ -70,7 +86,16 @@ export function DonutForm() {
                         <FormItem>
                            <FormLabel>Amount</FormLabel>
                            <FormControl>
-                              <Input placeholder="Number of Donuts" {...field} />
+                              <Input
+                                 type="number"
+                                 placeholder="Number of Donuts"
+                                 {...field}
+                                 onChange={(e) =>
+                                    field.onChange(
+                                       e.target.value === '' ? undefined : Number(e.target.value)
+                                    )
+                                 }
+                              />
                            </FormControl>
                            <FormDescription>
                               1 Donut = {costPerDonut} ETH <br />
@@ -87,7 +112,7 @@ export function DonutForm() {
             <Button
                onClick={form.handleSubmit(onSubmit)}
                type="submit"
-               disabled={!metamask || totalCost === 0}
+               disabled={!metamask || totalCost === 0 || vendingMachineBalance <= 0}
             >
                Purchase Now
             </Button>

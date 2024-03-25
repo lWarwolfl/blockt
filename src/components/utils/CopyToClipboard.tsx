@@ -1,16 +1,17 @@
+import { Button, type ButtonProps } from '@/components/ui/button' // Assuming ButtonProps is imported correctly
 import { getErrorMessage } from '@/lib/error'
 import { Icon } from '@iconify-icon/react'
 import React, { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import { Button, type ButtonProps } from '@/components/ui/button' // Assuming ButtonProps is imported correctly
 
 interface Props extends ButtonProps {
    chars?: number
    value: string
+   children?: React.ReactNode
 }
 
 export default function CopyToClipboard(props: Props) {
-   const { chars = 14, value } = props
+   const { chars = 14, value, children } = props
    const wrapperRef = React.createRef<HTMLButtonElement>()
    const [infoNotice, setInfoNotice] = useState('')
 
@@ -35,6 +36,7 @@ export default function CopyToClipboard(props: Props) {
 
    return (
       <Button {...props} ref={wrapperRef} onClick={triggerCopy}>
+         {children && children}
          {infoNotice || (
             <>
                {displayValue}

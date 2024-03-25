@@ -1,4 +1,5 @@
 import { getErrorMessage } from '@/lib/error'
+import { useStore } from '@/lib/store'
 import { getMetamask } from '@/lib/web3/provider'
 import toast from 'react-hot-toast'
 
@@ -9,9 +10,8 @@ const connectWallet = async () => {
       if (ethereum) {
          const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })) as string[]
          if (accounts[0]) {
-            toast.success(`You successfully connected to MetaMask.`)
-         } else {
-            toast.error(`You don't have any available accounts.`)
+            useStore.getState().setWalletAddress(accounts[0])
+            toast.success('You successfully connected to MetaMask')
          }
       }
    } catch (error) {
