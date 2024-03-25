@@ -1,10 +1,10 @@
 import MainLayout from '@/components/layout/MainLayout'
-import { ContractForm } from '@/components/utils/ContractForm'
+import { DonutForm } from '@/components/utils/DonutForm'
 
 export default function Home() {
    return (
       <MainLayout>
-         <ContractForm />
+         <DonutForm />
       </MainLayout>
    )
 }

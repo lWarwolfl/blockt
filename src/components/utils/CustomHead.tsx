@@ -15,20 +15,13 @@ export default function CustomHead(props: CustomHeadProps) {
   const router = useRouter()
 
   const seo = {
-     title: 'BlockT - Welcome To Blockchain World Brought To You By Web3',
+     title: 'BlockT - A Web3 Platform To Buy Tasty Donuts',
      description:
-        'My goal is to work with web3 to connect to smart contracts and send transactions on ethereum blockchain in this project.',
+        'My goal is to work with web3 to connect to smart contracts and send transactions on Ethereum Seploia testnet in this project and maybe buy some Donuts!',
      url: router.asPath,
      image: preview.src,
      twitterCardType: 'summary',
-     keywords: [
-        'Sina',
-        'Kheiri',
-        'BlockT',
-        'Web3',
-        'Blockchain',
-        'Ethereum',
-     ],
+     keywords: ['Sina', 'Kheiri', 'BlockT', 'Web3', 'Blockchain', 'Ethereum'],
      ...props,
   } satisfies CustomHeadProps
 

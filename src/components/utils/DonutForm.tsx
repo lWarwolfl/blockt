@@ -19,54 +19,62 @@ import {
 import { Input } from '@/components/ui/input'
 import { useStore } from '@/lib/store'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Icon } from '@iconify-icon/react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const formSchema = z.object({
-   contractAddress: z.string().refine((value) => /^0x[a-fA-F0-9]{40}$/i.test(value), {
-      message: 'Invalid contract contractAddress format.',
-   }),
+   amount: z.number().int(),
 })
 
-export function ContractForm() {
-   const { contractAddress, setContractAddress } = useStore()
+export function DonutForm() {
+   const { metamask } = useStore()
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-         contractAddress: '',
+         amount: undefined,
       },
    })
 
+   const [totalCost, setTotalCost] = useState<number>(0)
+   const costPerDonut: number = 0.0005
+
    function onSubmit(values: z.infer<typeof formSchema>) {
-      setContractAddress(values.contractAddress)
+      return values
    }
+
+   form.watch((value) => {
+      const amount = value.amount || 0
+      const cost = amount * costPerDonut
+      setTotalCost(cost)
+   })
 
    return (
       <Card className="my-auto w-full max-w-96">
          <CardHeader>
-            <CardTitle>Save contract contractAddress</CardTitle>
-            <CardDescription>
-               Start working with a smart contract on ethereum blockchain network.
-            </CardDescription>
+            <CardTitle>
+               <Icon icon="solar:donut-line-duotone" className="mr-1 align-middle text-2xl" />
+               Donut Vending Machine
+            </CardTitle>
+            <CardDescription>Remaining donuts in the machine</CardDescription>
          </CardHeader>
-         <CardContent>
+         <CardContent className="-mt-2">
             <Form {...form}>
                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
                   <FormField
                      control={form.control}
-                     name="contractAddress"
+                     name="amount"
                      render={({ field }) => (
                         <FormItem>
-                           <FormLabel>Address</FormLabel>
+                           <FormLabel>Amount</FormLabel>
                            <FormControl>
-                              <Input placeholder="Contract contractAddress" {...field} />
+                              <Input placeholder="Number of Donuts" {...field} />
                            </FormControl>
                            <FormDescription>
-                              Current address:{' '}
-                              {contractAddress && contractAddress !== ''
-                                 ? contractAddress
-                                 : 'not set'}
+                              1 Donut = {costPerDonut} ETH <br />
+                              Total cost: {totalCost.toFixed(4)} ETH
                            </FormDescription>
                            <FormMessage />
                         </FormItem>
@@ -75,9 +83,13 @@ export function ContractForm() {
                </form>
             </Form>
          </CardContent>
-         <CardFooter className="flex justify-between pt-2">
-            <Button onClick={form.handleSubmit(onSubmit)} type="submit">
-               Confirm
+         <CardFooter className="flex justify-between">
+            <Button
+               onClick={form.handleSubmit(onSubmit)}
+               type="submit"
+               disabled={!metamask || totalCost === 0}
+            >
+               Purchase Now
             </Button>
          </CardFooter>
       </Card>
