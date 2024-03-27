@@ -27,7 +27,7 @@ export function WalletDownload() {
                Download MetaMask
             </CardTitle>
             <CardDescription>
-               In order to use what this app offers you first need to install MetaMask{' '}
+               In order to use BlockT Dapp you first need to install MetaMask{' '}
                {isMobile ? 'app' : 'extension'} on your {isMobile ? 'device' : 'browser'}.
             </CardDescription>
          </CardHeader>
