@@ -17,7 +17,7 @@ export default function CustomHead(props: CustomHeadProps) {
   const seo = {
      title: 'BlockT - A Web3 Platform To Buy Tasty Donuts',
      description:
-        'My goal is to work with web3 to connect to smart contracts and send transactions on Ethereum Seploia testnet in this project and maybe buy some Donuts!',
+        'My goal is to work with web3 to connect to smart contracts and send transactions on Ethereum Sepolia testnet in this project and maybe buy some Donuts!',
      url: router.asPath,
      image: preview.src,
      twitterCardType: 'summary',

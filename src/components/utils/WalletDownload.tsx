@@ -31,7 +31,7 @@ export function WalletDownload() {
                   target="_blank"
                   href="https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn"
                >
-                  Chrome Browser
+                  Chrome
                   <Icon icon="bxl:chrome" className="-mr-2 text-xl" />
                </Link>
             </Button>
@@ -42,7 +42,7 @@ export function WalletDownload() {
                   target="_blank"
                   href="https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/"
                >
-                  Mozilla Browser
+                  Mozilla
                   <Icon icon="mdi:mozilla-firefox" className="-mr-2 text-xl" />
                </Link>
             </Button>
