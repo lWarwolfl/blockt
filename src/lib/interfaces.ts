@@ -15,3 +15,7 @@ export interface EthereumProvider extends MetaMaskProvider {
    isTronLink: boolean
    providers?: MetaMaskProvider[]
 }
+
+export interface AsyncFunctionProps {
+   loading?: React.Dispatch<React.SetStateAction<boolean>>
+}

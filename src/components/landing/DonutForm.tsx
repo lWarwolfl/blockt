@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import getVendingMachineBalance from '@/lib/methods/getVendingMachineBalance'
+import purchase, { costPerDonut } from '@/lib/methods/purchase'
 import { useStore } from '@/lib/store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify-icon/react'
@@ -30,7 +31,9 @@ const formSchema = z.object({
 })
 
 export function DonutForm() {
-   const { metamask } = useStore()
+   const { walletAddress, metamask, donuts, increaseDonuts } = useStore()
+   const [transactionLoading, setTransactionLoading] = useState<boolean>(false)
+   const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
@@ -40,10 +43,14 @@ export function DonutForm() {
    })
 
    const [totalCost, setTotalCost] = useState<number>(0)
-   const costPerDonut: number = 0.0005
 
-   function onSubmit(values: z.infer<typeof formSchema>) {
-      return values
+   async function onSubmit(values: z.infer<typeof formSchema>) {
+      const response = await purchase(
+         { address: walletAddress, amount: values.amount },
+         { loading: setTransactionLoading }
+      )
+
+      if (response) increaseDonuts()
    }
 
    form.watch((value) => {
@@ -57,13 +64,13 @@ export function DonutForm() {
    useEffect(() => {
       async function fetchInitialData() {
          if (metamask) {
-            const donutCount = await getVendingMachineBalance()
+            const donutCount = await getVendingMachineBalance({ loading: setBalanceLoading })
             setVendingMachineBalance(Number(donutCount))
          }
       }
 
       fetchInitialData()
-   }, [metamask])
+   }, [metamask, donuts])
 
    return (
       <Card className="my-auto w-full max-w-96">
@@ -73,7 +80,12 @@ export function DonutForm() {
                Donut Vending Machine
             </CardTitle>
             <CardDescription>
-               {vendingMachineBalance} Remaining donuts in the machine
+               {balanceLoading ? (
+                  <Icon icon="line-md:loading-twotone-loop" className="align-middle text-2xl" />
+               ) : (
+                  vendingMachineBalance
+               )}{' '}
+               Remaining donuts in the machine
             </CardDescription>
          </CardHeader>
          <CardContent className="-mt-2">
@@ -113,8 +125,14 @@ export function DonutForm() {
                onClick={form.handleSubmit(onSubmit)}
                type="submit"
                disabled={!metamask || totalCost === 0 || vendingMachineBalance <= 0}
+               className="gap-1.5"
             >
                Purchase Now
+               {transactionLoading ? (
+                  <Icon icon="line-md:loading-twotone-loop" className="-mr-2 text-xl" />
+               ) : (
+                  <Icon icon="ic:outline-payments" className="-mr-2 text-xl" />
+               )}
             </Button>
          </CardFooter>
       </Card>

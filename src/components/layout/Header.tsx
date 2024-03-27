@@ -8,19 +8,25 @@ import { Icon } from '@iconify-icon/react'
 import { useEffect, useState } from 'react'
 
 export default function Header() {
-   const { walletAddress, metamask } = useStore()
+   const { walletAddress, metamask, donuts } = useStore()
    const [userBalance, setUserBalance] = useState<number | undefined>(undefined)
+   const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
+   const [connectLoading, setConnectLoading] = useState<boolean>(false)
+   const [disconnectLoading, setDisconnectLoading] = useState<boolean>(false)
 
    useEffect(() => {
       async function fetchInitialData() {
          if (metamask && walletAddress && walletAddress !== '') {
-            const donutCount = await donutBalances(walletAddress)
+            const donutCount = await donutBalances(
+               { address: walletAddress },
+               { loading: setBalanceLoading }
+            )
             setUserBalance(Number(donutCount))
          }
       }
 
       fetchInitialData()
-   }, [metamask, walletAddress])
+   }, [metamask, walletAddress, donuts])
 
    return (
       <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">
@@ -29,8 +35,16 @@ export default function Header() {
 
             {walletAddress !== '' ? (
                <>
-                  <Button onClick={disconnectWallet} variant="outline" size="icon">
-                     <Icon icon="line-md:logout" className="absolute text-xl" />
+                  <Button
+                     onClick={() => disconnectWallet({ loading: setDisconnectLoading })}
+                     variant="outline"
+                     size="icon"
+                  >
+                     {disconnectLoading ? (
+                        <Icon icon="line-md:loading-twotone-loop" className="absolute text-lg" />
+                     ) : (
+                        <Icon icon="line-md:logout" className="absolute text-lg" />
+                     )}
                   </Button>
 
                   <CopyToClipboard
@@ -39,7 +53,14 @@ export default function Header() {
                      value={walletAddress}
                      chars={20}
                   >
-                     {userBalance !== undefined && (
+                     {userBalance === undefined || balanceLoading ? (
+                        <span className="-ml-2 mr-2 flex items-center gap-1">
+                           <Icon
+                              icon="line-md:loading-twotone-loop"
+                              className="align-middle text-xl"
+                           />
+                        </span>
+                     ) : (
                         <span className="-ml-2 mr-2 flex items-center gap-1">
                            <Icon icon="solar:donut-line-duotone" className="align-middle text-xl" />
                            {userBalance} <span className="ml-1">|</span>
@@ -50,11 +71,15 @@ export default function Header() {
             ) : (
                <Button
                   className="ml-auto gap-1.5 sm:ml-0"
-                  onClick={connectWallet}
+                  onClick={() => connectWallet({ loading: setConnectLoading })}
                   disabled={!metamask}
                >
                   Connect Wallet
-                  <Icon icon="ic:outline-bolt" className="-mr-2 text-xl" />
+                  {connectLoading ? (
+                     <Icon icon="line-md:loading-twotone-loop" className="-mr-2 text-xl" />
+                  ) : (
+                     <Icon icon="ic:outline-bolt" className="-mr-2 text-xl" />
+                  )}
                </Button>
             )}
          </div>
