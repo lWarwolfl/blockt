@@ -1,7 +1,7 @@
-import { type EthereumProvider } from '@/lib/interfaces'
+import { type EthereumProviderInterface } from '@/lib/interfaces'
 
 declare global {
    interface Window {
-      ethereum?: EthereumProvider
+      ethereum?: EthereumProviderInterface
    }
 }

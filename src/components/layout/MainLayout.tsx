@@ -5,6 +5,7 @@ import { WalletDownload } from '@/components/utils/WalletDownload'
 import { getErrorMessage } from '@/lib/error'
 import { useStore } from '@/lib/store'
 import { getMetamask } from '@/lib/web3/provider'
+import switchNetwork from '@/lib/web3/switchNetwork'
 import clsx from 'clsx'
 import { Poppins } from 'next/font/google'
 import { useEffect } from 'react'
@@ -22,7 +23,7 @@ interface Props {
 }
 
 export default function MainLayout({ children }: Props) {
-   const { walletAddress, setWalletAddress, metamask, setMetamask } = useStore()
+   const { walletAddress, setWalletAddress, metamask, setMetamask, setChainId } = useStore()
    const ethereum = getMetamask()
 
    useEffect(() => {
@@ -47,17 +48,29 @@ export default function MainLayout({ children }: Props) {
 
          handleAccountChange()
 
+         const handleNetworkChange = async () => {
+            if (walletAddress && walletAddress !== '' && ethereum) {
+               setChainId('')
+               const network = await switchNetwork()
+               setChainId(network ? network : '')
+            }
+         }
+
+         handleNetworkChange()
+
          ethereum.on('accountsChanged', handleAccountChange)
+         ethereum.on('chainChanged', handleNetworkChange)
 
          return () => {
             ethereum.removeListener('accountsChanged', handleAccountChange)
+            ethereum.removeListener('chainChanged', handleNetworkChange)
          }
       } else {
          setMetamask(false)
          setWalletAddress('')
          toast.error('MetaMask is not installed.')
       }
-   }, [walletAddress, setWalletAddress, ethereum, setMetamask])
+   }, [walletAddress, setWalletAddress, ethereum, setMetamask, setChainId])
 
    return (
       <>

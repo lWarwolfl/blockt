@@ -1,9 +1,9 @@
 import getContract from '@/lib/contract/contract'
 import { getErrorMessage } from '@/lib/error'
-import { type AsyncFunctionProps } from '@/lib/interfaces'
+import { type AsyncFunctionInterface } from '@/lib/interfaces'
 import toast from 'react-hot-toast'
 
-export default async function getVendingMachineBalance({ loading }: AsyncFunctionProps) {
+export default async function getVendingMachineBalance({ loading }: AsyncFunctionInterface) {
    try {
       loading?.(true)
       const contract = getContract(false)

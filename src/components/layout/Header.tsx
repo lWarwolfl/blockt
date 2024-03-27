@@ -3,16 +3,19 @@ import CopyToClipboard from '@/components/utils/CopyToClipboard'
 import { ThemeToggle } from '@/components/utils/ThemeToggle'
 import donutBalances from '@/lib/methods/donutBalances'
 import { useStore } from '@/lib/store'
+import { getMetamask } from '@/lib/web3/provider'
 import { connectWallet, disconnectWallet } from '@/lib/web3/wallet'
 import { Icon } from '@iconify-icon/react'
 import { useEffect, useState } from 'react'
 
 export default function Header() {
-   const { walletAddress, metamask, donuts } = useStore()
+   const { walletAddress, metamask, donuts, chainId } = useStore()
    const [userBalance, setUserBalance] = useState<number | undefined>(undefined)
    const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
    const [connectLoading, setConnectLoading] = useState<boolean>(false)
    const [disconnectLoading, setDisconnectLoading] = useState<boolean>(false)
+
+   const ethereum = getMetamask()
 
    useEffect(() => {
       async function fetchInitialData() {
@@ -26,7 +29,7 @@ export default function Header() {
       }
 
       fetchInitialData()
-   }, [metamask, walletAddress, donuts])
+   }, [metamask, walletAddress, donuts, ethereum, chainId])
 
    return (
       <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">

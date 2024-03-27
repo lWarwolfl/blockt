@@ -1,4 +1,4 @@
-export interface MetaMaskProvider {
+export interface MetaMaskProviderInterface {
    isMetaMask: boolean
    _metamask: {
       isUnlocked: () => Promise<boolean>
@@ -11,11 +11,25 @@ export interface MetaMaskProvider {
    isConnected: () => boolean
 }
 
-export interface EthereumProvider extends MetaMaskProvider {
+export interface EthereumProviderInterface extends MetaMaskProviderInterface {
    isTronLink: boolean
-   providers?: MetaMaskProvider[]
+   providers?: MetaMaskProviderInterface[]
 }
 
-export interface AsyncFunctionProps {
+export interface AsyncFunctionInterface {
    loading?: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export interface NetworkInterface {
+   chainId: string
+   chainName: string
+   nativeCurrency: NativeCurrencyInterface
+   rpcUrls: string[]
+   blockExplorerUrls: string[]
+}
+
+export interface NativeCurrencyInterface {
+   name: string
+   symbol: string
+   decimals: number
 }

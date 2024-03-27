@@ -44,7 +44,7 @@ export default function InlineCopyToClipboard({
          {...spanProps}
          ref={wrapperRef}
          onClick={triggerCopy}
-         className="cursor-pointer select-none text-zinc-400 underline-offset-4 hover:underline"
+         className="cursor-pointer select-none break-words text-zinc-400 underline-offset-4 hover:underline"
       >
          {infoNotice || (
             <>

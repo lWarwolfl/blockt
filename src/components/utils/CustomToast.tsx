@@ -7,7 +7,7 @@ interface Props {
 
 export function CustomToast({ t }: Props) {
    return (
-      <div className="xs:p-4 w-dvw max-w-md rounded-md border border-solid border-border bg-card/50 p-2 text-sm backdrop-blur-sm">
+      <div className="xs:p-4 w-dvw max-w-md break-words rounded-md border border-solid border-border bg-card/50 p-2 text-sm backdrop-blur-sm">
          <Icon
             observe={false}
             icon={

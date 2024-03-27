@@ -1,6 +1,6 @@
 import getContract from '@/lib/contract/contract'
 import { getErrorMessage } from '@/lib/error'
-import { type AsyncFunctionProps } from '@/lib/interfaces'
+import { type AsyncFunctionInterface } from '@/lib/interfaces'
 import { getMetamask } from '@/lib/web3/provider'
 import toast from 'react-hot-toast'
 import Web3 from 'web3'
@@ -12,12 +12,12 @@ interface Props {
    address: string
 }
 
-export default async function purchase(params: Props, { loading }: AsyncFunctionProps) {
+export default async function purchase(params: Props, { loading }: AsyncFunctionInterface) {
    try {
       loading?.(true)
       const web3 = new Web3(getMetamask())
       const contract = getContract()
-      await contract.methods
+      await contract?.methods
          .purchase(params.amount)
          .send({
             from: params.address,

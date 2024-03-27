@@ -1,12 +1,13 @@
 import { getErrorMessage } from '@/lib/error'
-import { type AsyncFunctionProps } from '@/lib/interfaces'
+import { type AsyncFunctionInterface } from '@/lib/interfaces'
 import { useStore } from '@/lib/store'
 import { getMetamask } from '@/lib/web3/provider'
+import switchNetwork from '@/lib/web3/switchNetwork'
 import toast from 'react-hot-toast'
 
 const ethereum = getMetamask()
 
-const connectWallet = async ({ loading }: AsyncFunctionProps) => {
+const connectWallet = async ({ loading }: AsyncFunctionInterface) => {
    try {
       if (ethereum) {
          loading?.(true)
@@ -14,6 +15,9 @@ const connectWallet = async ({ loading }: AsyncFunctionProps) => {
          if (accounts[0]) {
             useStore.getState().setWalletAddress(accounts[0])
             toast.success('You successfully connected to MetaMask')
+            useStore.getState().setChainId('')
+            const network = await switchNetwork()
+            useStore.getState().setChainId(network ? network : '')
             loading?.(false)
          }
       }
@@ -23,7 +27,7 @@ const connectWallet = async ({ loading }: AsyncFunctionProps) => {
    }
 }
 
-const disconnectWallet = async ({ loading }: AsyncFunctionProps) => {
+const disconnectWallet = async ({ loading }: AsyncFunctionInterface) => {
    try {
       if (ethereum) {
          loading?.(true)

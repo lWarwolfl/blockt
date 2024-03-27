@@ -1,13 +1,13 @@
 import getContract from '@/lib/contract/contract'
 import { getErrorMessage } from '@/lib/error'
-import { type AsyncFunctionProps } from '@/lib/interfaces'
+import { type AsyncFunctionInterface } from '@/lib/interfaces'
 import toast from 'react-hot-toast'
 
 interface Props {
    address: string
 }
 
-export default async function donutBalances(params: Props, { loading }: AsyncFunctionProps) {
+export default async function donutBalances(params: Props, { loading }: AsyncFunctionInterface) {
    try {
       loading?.(true)
       const contract = getContract()

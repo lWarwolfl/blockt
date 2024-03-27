@@ -1,4 +1,4 @@
-import { type MetaMaskProvider } from '@/lib/interfaces'
+import { type MetaMaskProviderInterface } from '@/lib/interfaces'
 import Web3 from 'web3'
 
 const web3provider = new Web3.providers.HttpProvider(
@@ -15,7 +15,7 @@ const getMetamask = () => {
    ) {
       return undefined
    } else {
-      return ethereum as MetaMaskProvider
+      return ethereum as MetaMaskProviderInterface
    }
 }
 
