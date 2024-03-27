@@ -3,6 +3,7 @@ import CopyToClipboard from '@/components/utils/CopyToClipboard'
 import { ThemeToggle } from '@/components/utils/ThemeToggle'
 import donutBalances from '@/lib/methods/donutBalances'
 import { useStore } from '@/lib/store'
+import { networks } from '@/lib/web3/networks'
 import { getMetamask } from '@/lib/web3/provider'
 import { connectWallet, disconnectWallet } from '@/lib/web3/wallet'
 import { Icon } from '@iconify-icon/react'
@@ -19,7 +20,14 @@ export default function Header() {
 
    useEffect(() => {
       async function fetchInitialData() {
-         if (metamask && walletAddress && walletAddress !== '') {
+         if (
+            metamask &&
+            walletAddress &&
+            walletAddress !== '' &&
+            chainId &&
+            networks[0] &&
+            chainId === networks[0].chainId
+         ) {
             const donutCount = await donutBalances(
                { address: walletAddress },
                { loading: setBalanceLoading }

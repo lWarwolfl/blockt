@@ -124,7 +124,13 @@ export function DonutForm() {
             <Button
                onClick={form.handleSubmit(onSubmit)}
                type="submit"
-               disabled={!metamask || totalCost === 0 || vendingMachineBalance <= 0}
+               disabled={
+                  !metamask ||
+                  totalCost === 0 ||
+                  vendingMachineBalance <= 0 ||
+                  !walletAddress ||
+                  walletAddress === ''
+               }
                className="gap-1.5"
             >
                Purchase Now
