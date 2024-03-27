@@ -5,6 +5,7 @@ import { WalletDownload } from '@/components/utils/WalletDownload'
 import { getErrorMessage } from '@/lib/error'
 import { useStore } from '@/lib/store'
 import { getMetamask } from '@/lib/web3/provider'
+import clsx from 'clsx'
 import { Poppins } from 'next/font/google'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
@@ -61,7 +62,7 @@ export default function MainLayout({ children }: Props) {
    return (
       <>
          <CustomHead />
-         <main className={`flex flex-col items-center p-6 lg:p-24 ${font.className} h-dvh`}>
+         <main className={clsx('flex h-dvh flex-col items-center p-6 lg:p-24', font.className)}>
             <Header />
             {metamask ? children : <WalletDownload />}
             <Footer />
