@@ -64,19 +64,19 @@ export default function Header() {
                      value={walletAddress}
                      chars={20}
                   >
-                     {userBalance === undefined || balanceLoading ? (
+                     {balanceLoading ? (
                         <span className="-ml-2 mr-2 flex items-center gap-1">
                            <Icon
                               icon="line-md:loading-twotone-loop"
                               className="align-middle text-xl"
                            />
                         </span>
-                     ) : (
+                     ) : userBalance && userBalance >= 0 ? (
                         <span className="-ml-2 mr-2 flex items-center gap-1">
                            <Icon icon="solar:donut-line-duotone" className="align-middle text-xl" />
                            {userBalance} <span className="ml-1">|</span>
                         </span>
-                     )}
+                     ) : null}
                   </CopyToClipboard>
                </>
             ) : (

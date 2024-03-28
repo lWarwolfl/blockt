@@ -9,7 +9,7 @@ export const networks: NetworkInterface[] = [
          name: 'MATIC',
          symbol: 'MATIC',
       },
-      rpcUrls: ['https://polygon-mumbai.infura.io/v3/'],
+      rpcUrls: ['https://polygon-mumbai-bor-rpc.publicnode.com'],
       chainName: 'Mumbai',
    },
 ]

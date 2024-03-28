@@ -62,8 +62,7 @@ export default function MainLayout({ children }: Props) {
          handleAccountChange()
 
          const handleNetworkChange = async () => {
-            if (walletAddress && walletAddress !== '' && ethereum) {
-               setChainId('')
+            if (walletAddress && walletAddress !== '') {
                const network = await switchNetwork()
                setChainId(network ? network : '')
             }
