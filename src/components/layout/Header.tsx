@@ -96,7 +96,7 @@ export default function Header() {
          </div>
 
          <div className="pointer-events-none hidden place-items-center gap-2 font-mono font-black sm:flex">
-            BlockT <Icon icon="cryptocurrency:etc" className="text-3xl" />
+            BlockT <Icon icon="cryptocurrency:matic" className="text-3xl" />
          </div>
       </div>
    )

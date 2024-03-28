@@ -110,8 +110,8 @@ export function DonutForm() {
                               />
                            </FormControl>
                            <FormDescription>
-                              1 Donut = {costPerDonut} ETH <br />
-                              Total cost: {totalCost.toFixed(4)} ETH
+                              1 Donut = {costPerDonut} MATIC <br />
+                              Total cost: {totalCost.toFixed(2)} MATIC
                            </FormDescription>
                            <FormMessage />
                         </FormItem>

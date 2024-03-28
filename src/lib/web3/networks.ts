@@ -2,14 +2,14 @@ import { type NetworkInterface } from '@/lib/interfaces'
 
 export const networks: NetworkInterface[] = [
    {
-      chainId: '0xaa36a7',
-      chainName: 'Sepolia test network',
+      chainId: '0x13881',
+      blockExplorerUrls: ['https://mumbai.polygonscan.com'],
       nativeCurrency: {
-         name: 'SepoliaETH',
-         symbol: 'SepoliaETH',
          decimals: 18,
+         name: 'MATIC',
+         symbol: 'MATIC',
       },
-      rpcUrls: ['https://sepolia.infura.io/v3/'],
-      blockExplorerUrls: ['https://sepolia.etherscan.io/'],
+      rpcUrls: ['https://polygon-mumbai.infura.io/v3/'],
+      chainName: 'Mumbai',
    },
 ]

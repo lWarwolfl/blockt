@@ -1,4 +1,4 @@
-export const VendingmachineAddress = '0xbaA11FAF04e9e8A7FeCe9B574D8eFF1518386A68'
+export const VendingmachineAddress = '0xC8be6E33495f7FeBd224d38782BFB526642cCf9C'
 
 export const vendingMachineABI = [
    {
@@ -15,6 +15,19 @@ export const vendingMachineABI = [
          },
       ],
       name: 'donutBalances',
+      outputs: [
+         {
+            internalType: 'uint256',
+            name: '',
+            type: 'uint256',
+         },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+   },
+   {
+      inputs: [],
+      name: 'getBalance',
       outputs: [
          {
             internalType: 'uint256',
@@ -73,6 +86,13 @@ export const vendingMachineABI = [
          },
       ],
       name: 'restock',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+   },
+   {
+      inputs: [],
+      name: 'withdraw',
       outputs: [],
       stateMutability: 'nonpayable',
       type: 'function',
