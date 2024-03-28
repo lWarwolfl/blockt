@@ -10,7 +10,7 @@ import { Icon } from '@iconify-icon/react'
 import { useEffect, useState } from 'react'
 
 export default function Header() {
-   const { walletAddress, metamask, donuts, chainId } = useStore()
+   const { walletAddress, metamask, update, chainId } = useStore()
    const [userBalance, setUserBalance] = useState<number | undefined>(undefined)
    const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
    const [connectLoading, setConnectLoading] = useState<boolean>(false)
@@ -37,7 +37,7 @@ export default function Header() {
       }
 
       fetchInitialData()
-   }, [metamask, walletAddress, donuts, ethereum, chainId])
+   }, [metamask, walletAddress, update, ethereum, chainId])
 
    return (
       <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">

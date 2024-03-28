@@ -4,11 +4,13 @@ import { persist } from 'zustand/middleware'
 interface StoreState {
    walletAddress: string
    metamask: boolean
-   donuts: number
+   update: number
+   rerender: number
    chainId: string
    setWalletAddress: (walletAddress: string) => void
    setMetamask: (metamask: boolean) => void
-   increaseDonuts: () => void
+   updateNow: () => void
+   rerenderNow: () => void
    setChainId: (chainId: string) => void
 }
 
@@ -17,11 +19,13 @@ export const useStore = create(
       (set, get) => ({
          walletAddress: '',
          metamask: false,
-         donuts: 0,
+         update: 0,
+         rerender: 0,
          chainId: '',
          setWalletAddress: (walletAddress) => set({ walletAddress: walletAddress }),
          setMetamask: (metamask) => set({ metamask: metamask }),
-         increaseDonuts: () => set({ donuts: get().donuts + 1 }),
+         updateNow: () => set({ update: get().update + 1 }),
+         rerenderNow: () => set({ rerender: get().rerender + 1 }),
          setChainId: (chainId) => set({ chainId: chainId }),
       }),
       {

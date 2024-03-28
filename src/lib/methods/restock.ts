@@ -8,33 +8,25 @@ import { getMetamask } from '@/lib/web3/provider'
 import toast from 'react-hot-toast'
 import Web3 from 'web3'
 
-export const costPerDonut: number = 0.02
-
 interface Props {
    amount: number
    address: string
 }
 
-export default async function purchase(params: Props, { loading }: AsyncFunctionInterface) {
+export default async function restock(params: Props, { loading }: AsyncFunctionInterface) {
    try {
       loading?.(true)
       const web3 = new Web3(getMetamask())
       const contract = getContract()
 
       const gasPrice = await web3.eth.getGasPrice()
-      // const gasEstimate = await contract?.methods
-      //    .purchase(params.amount)
-      //    .estimateGas({ from: params.address })
 
       await contract?.methods
-         .purchase(params.amount)
+         .restock(params.amount)
          .send({
             from: params.address,
             gas: `${1_000_000}`,
             gasPrice: `${Number(gasPrice)}`,
-            value: (
-               Number(web3.utils.toWei(`${costPerDonut}`, 'ether')) * params.amount
-            ).toString(),
          })
          .on('transactionHash', (hash: string) => {
             loading?.(false)

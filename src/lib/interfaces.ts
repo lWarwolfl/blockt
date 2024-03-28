@@ -33,3 +33,37 @@ export interface NativeCurrencyInterface {
    symbol: string
    decimals: number
 }
+
+export interface TransactionConfirmationInterface {
+   confirmations: bigint
+   receipt: TransactionReceiptInterface
+   latestBlockHash: string
+}
+
+export interface TransactionReceiptInterface {
+   blockHash: string
+   blockNumber: bigint
+   cumulativeGasUsed: bigint
+   effectiveGasPrice: bigint
+   from: string
+   gasUsed: bigint
+   logs: TransactionLogInterface[]
+   logsBloom: string
+   status: bigint
+   to: string
+   transactionHash: string
+   transactionIndex: bigint
+   type: bigint
+}
+
+export interface TransactionLogInterface {
+   address: string
+   topics: string[]
+   data: string
+   blockNumber: bigint
+   transactionHash: string
+   transactionIndex: bigint
+   blockHash: string
+   logIndex: bigint
+   removed: boolean
+}
