@@ -35,7 +35,13 @@ export default async function purchase(params: Props, { loading }: AsyncFunction
          })
          .on('transactionHash', (hash: string) => {
             loading?.(false)
-            toast.success(`Your transaction was successfully sent with this hash: ${hash}`)
+            toast.success(`Your transaction was sent with this hash: ${hash}`)
+         })
+         .on('confirmation', (confirmationNumber: unknown) => {
+            const number = confirmationNumber as number
+            if (number === 0) {
+               toast.success('Your transaction was successful.')
+            }
          })
       return true
    } catch (error) {
