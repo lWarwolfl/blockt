@@ -41,10 +41,10 @@ export function WithdrawForm() {
 
    useEffect(() => {
       async function fetchOwner() {
-         if (metamask && walletAddress && walletAddress !== '') {
+         if (metamask && useStore.getState().walletAddress !== '') {
             const ownerAddress = await owner({})
 
-            if (walletAddress !== String(ownerAddress)) router.push('/')
+            if (useStore.getState().walletAddress !== String(ownerAddress)) router.push('/')
          }
       }
 

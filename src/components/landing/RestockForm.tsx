@@ -35,7 +35,7 @@ const formSchema = z.object({
 export function RestockForm() {
    const router = useRouter()
 
-   const { walletAddress, metamask, update, updateNow } = useStore()
+   const { walletAddress, metamask, update, updateNow } = useStore.getState()
    const [transactionLoading, setTransactionLoading] = useState<boolean>(false)
    const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
 
@@ -76,10 +76,10 @@ export function RestockForm() {
 
    useEffect(() => {
       async function fetchOwner() {
-         if (metamask && walletAddress && walletAddress !== '') {
+         if (metamask && useStore.getState().walletAddress !== '') {
             const ownerAddress = await owner({})
 
-            if (walletAddress !== String(ownerAddress)) router.push('/')
+            if (useStore.getState().walletAddress !== String(ownerAddress)) router.push('/')
          }
       }
 
