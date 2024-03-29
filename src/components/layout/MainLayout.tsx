@@ -37,14 +37,13 @@ export default function MainLayout({ children }: Props) {
    const theme = useTheme().theme
    const themeSystem = useTheme().systemTheme
 
-   const { walletAddress, setWalletAddress, metamask, setMetamask, chainId, setChainId } =
-      useStore()
+   const { walletAddress, metamask, chainId } = useStore()
 
    useEffect(() => {
       const ethereum = getMetamask()
 
       if (ethereum) {
-         setMetamask(true)
+         useStore.getState().setMetamask(true)
 
          const web3 = new Web3(ethereum)
 
@@ -56,11 +55,11 @@ export default function MainLayout({ children }: Props) {
 
                if (accounts[0]) {
                   if (currentChainId === expectedChainId) {
-                     setWalletAddress(accounts[0])
-                     setChainId(ethereum.chainId)
+                     useStore.getState().setWalletAddress(accounts[0])
+                     useStore.getState().setChainId(ethereum.chainId)
                   }
                } else if (useStore.getState().walletAddress !== '') {
-                  setWalletAddress('')
+                  useStore.getState().setWalletAddress('')
                   toast.success('You successfully disconnected from MetaMask')
                }
             } catch (error) {
@@ -75,7 +74,7 @@ export default function MainLayout({ children }: Props) {
             const expectedChainId = parseInt(networks[0].chainId, 16)
 
             if (currentChainId !== expectedChainId) {
-               setChainId('')
+               useStore.getState().setChainId('')
                await disconnectWallet({})
             }
          }
@@ -90,11 +89,11 @@ export default function MainLayout({ children }: Props) {
             ethereum.removeListener('chainChanged', handleNetworkChange)
          }
       } else {
-         setMetamask(false)
-         setWalletAddress('')
+         useStore.getState().setMetamask(false)
+         useStore.getState().setWalletAddress('')
          toast.error('MetaMask is not installed.')
       }
-   }, [walletAddress, setWalletAddress, setMetamask, setChainId, chainId])
+   }, [walletAddress, chainId])
 
    return (
       <>

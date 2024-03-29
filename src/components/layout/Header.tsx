@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import Web3 from 'web3'
 
 export default function Header() {
-   const { walletAddress, metamask, update, chainId, setChainId } = useStore()
+   const { walletAddress, metamask, update, chainId } = useStore()
    const [userBalance, setUserBalance] = useState<number | undefined>(undefined)
    const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
    const [connectLoading, setConnectLoading] = useState<boolean>(false)
@@ -36,13 +36,13 @@ export default function Header() {
             )
             setUserBalance(Number(donutCount))
          } else if (currentChainId !== expectedChainId) {
-            setChainId('')
+            useStore.getState().setChainId('')
             await disconnectWallet({})
          }
       }
 
       fetchInitialData()
-   }, [metamask, walletAddress, update, chainId, setChainId])
+   }, [metamask, walletAddress, update, chainId])
 
    return (
       <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">
