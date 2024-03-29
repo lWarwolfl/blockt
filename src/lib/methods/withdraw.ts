@@ -24,7 +24,7 @@ export default async function withdraw(params: Props, { loading }: AsyncFunction
          .withdraw()
          .send({
             from: params.address,
-            gas: `${1_000_000}`,
+            gas: `${200_000}`,
             gasPrice: `${Number(gasPrice)}`,
          })
          .on('transactionHash', (hash: string) => {

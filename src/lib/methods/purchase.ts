@@ -30,7 +30,7 @@ export default async function purchase(params: Props, { loading }: AsyncFunction
          .purchase(params.amount)
          .send({
             from: params.address,
-            gas: `${1_000_000}`,
+            gas: `${200_000}`,
             gasPrice: `${Number(gasPrice)}`,
             value: (
                Number(web3.utils.toWei(`${costPerDonut}`, 'ether')) * params.amount
