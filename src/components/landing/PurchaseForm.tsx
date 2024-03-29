@@ -78,10 +78,12 @@ export function PurchaseForm() {
 
    useEffect(() => {
       async function fetchOwner() {
-         if (metamask && walletAddress && walletAddress !== '') {
+         if (useStore.getState().metamask && useStore.getState().walletAddress !== '') {
             const ownerAddress = await owner({ loading: setIsOwnerLoading })
 
-            if (walletAddress === String(ownerAddress)) setIsOwner(true)
+            if (useStore.getState().walletAddress === String(ownerAddress)) setIsOwner(true)
+         } else if (useStore.getState().walletAddress === '') {
+            setIsOwner(false)
          }
       }
 

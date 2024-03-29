@@ -32,15 +32,21 @@ export default function App({ Component, pageProps }: AppProps) {
    }, [])
 
    return (
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-         <Toaster position="bottom-center" reverseOrder={false}>
-            {(t) => {
-               return <CustomToast t={t} />
-            }}
-         </Toaster>
-         <MainLayout>
+      <MainLayout>
+         <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+         >
+            <Toaster position="bottom-center" reverseOrder={false}>
+               {(t) => {
+                  return <CustomToast t={t} />
+               }}
+            </Toaster>
+
             <Component {...pageProps} />
-         </MainLayout>
-      </ThemeProvider>
+         </ThemeProvider>
+      </MainLayout>
    )
 }

@@ -39,9 +39,10 @@ export default function MainLayout({ children }: Props) {
 
    const { walletAddress, setWalletAddress, metamask, setMetamask, chainId, setChainId } =
       useStore()
-   const ethereum = getMetamask()
 
    useEffect(() => {
+      const ethereum = getMetamask()
+
       if (ethereum) {
          setMetamask(true)
 
@@ -93,7 +94,7 @@ export default function MainLayout({ children }: Props) {
          setWalletAddress('')
          toast.error('MetaMask is not installed.')
       }
-   }, [walletAddress, setWalletAddress, ethereum, setMetamask, setChainId, chainId])
+   }, [walletAddress, setWalletAddress, setMetamask, setChainId, chainId])
 
    return (
       <>

@@ -17,9 +17,8 @@ export default function Header() {
    const [connectLoading, setConnectLoading] = useState<boolean>(false)
    const [disconnectLoading, setDisconnectLoading] = useState<boolean>(false)
 
-   const ethereum = getMetamask()
-
    useEffect(() => {
+      const ethereum = getMetamask()
       const web3 = new Web3(ethereum)
 
       async function fetchInitialData() {
@@ -43,7 +42,7 @@ export default function Header() {
       }
 
       fetchInitialData()
-   }, [metamask, walletAddress, update, ethereum, chainId, setChainId])
+   }, [metamask, walletAddress, update, chainId, setChainId])
 
    return (
       <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">
