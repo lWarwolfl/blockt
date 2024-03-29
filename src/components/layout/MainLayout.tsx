@@ -5,8 +5,9 @@ import { WebGLParticles } from '@/components/utils/Particles'
 import { WalletDownload } from '@/components/utils/WalletDownload'
 import { getErrorMessage } from '@/lib/error'
 import { useStore } from '@/lib/store'
+import { networks } from '@/lib/web3/networks'
 import { getMetamask } from '@/lib/web3/provider'
-import switchNetwork from '@/lib/web3/switchNetwork'
+import { disconnectWallet } from '@/lib/web3/wallet'
 import clsx from 'clsx'
 import { useTheme } from 'next-themes'
 import { Poppins } from 'next/font/google'
@@ -36,7 +37,8 @@ export default function MainLayout({ children }: Props) {
    const theme = useTheme().theme
    const themeSystem = useTheme().systemTheme
 
-   const { walletAddress, setWalletAddress, metamask, setMetamask, setChainId } = useStore()
+   const { walletAddress, setWalletAddress, metamask, setMetamask, chainId, setChainId } =
+      useStore()
    const ethereum = getMetamask()
 
    useEffect(() => {
@@ -48,9 +50,15 @@ export default function MainLayout({ children }: Props) {
          const handleAccountChange = async () => {
             try {
                const accounts = await web3.eth.getAccounts()
+               const currentChainId = Number(await web3.eth.getChainId())
+               const expectedChainId = parseInt(networks[0].chainId, 16)
+
                if (accounts[0]) {
-                  setWalletAddress(accounts[0])
-               } else if (walletAddress !== '') {
+                  if (currentChainId === expectedChainId) {
+                     setWalletAddress(accounts[0])
+                     setChainId(ethereum.chainId)
+                  }
+               } else if (useStore.getState().walletAddress !== '') {
                   setWalletAddress('')
                   toast.success('You successfully disconnected from MetaMask')
                }
@@ -62,9 +70,12 @@ export default function MainLayout({ children }: Props) {
          handleAccountChange()
 
          const handleNetworkChange = async () => {
-            if (walletAddress && walletAddress !== '') {
-               const network = await switchNetwork()
-               setChainId(network ? network : '')
+            const currentChainId = Number(await web3.eth.getChainId())
+            const expectedChainId = parseInt(networks[0].chainId, 16)
+
+            if (currentChainId !== expectedChainId) {
+               setChainId('')
+               await disconnectWallet({})
             }
          }
 
@@ -82,7 +93,7 @@ export default function MainLayout({ children }: Props) {
          setWalletAddress('')
          toast.error('MetaMask is not installed.')
       }
-   }, [walletAddress, setWalletAddress, ethereum, setMetamask, setChainId])
+   }, [walletAddress, setWalletAddress, ethereum, setMetamask, setChainId, chainId])
 
    return (
       <>

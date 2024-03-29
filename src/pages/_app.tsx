@@ -1,3 +1,4 @@
+import MainLayout from '@/components/layout/MainLayout'
 import { CustomToast } from '@/components/utils/CustomToast'
 import { ThemeProvider } from '@/components/utils/ThemeProvider'
 import '@/styles/globals.css'
@@ -37,7 +38,9 @@ export default function App({ Component, pageProps }: AppProps) {
                return <CustomToast t={t} />
             }}
          </Toaster>
-         <Component {...pageProps} />
+         <MainLayout>
+            <Component {...pageProps} />
+         </MainLayout>
       </ThemeProvider>
    )
 }

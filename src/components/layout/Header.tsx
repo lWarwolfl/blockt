@@ -8,9 +8,10 @@ import { getMetamask } from '@/lib/web3/provider'
 import { connectWallet, disconnectWallet } from '@/lib/web3/wallet'
 import { Icon } from '@iconify-icon/react'
 import { useEffect, useState } from 'react'
+import Web3 from 'web3'
 
 export default function Header() {
-   const { walletAddress, metamask, update, chainId } = useStore()
+   const { walletAddress, metamask, update, chainId, setChainId } = useStore()
    const [userBalance, setUserBalance] = useState<number | undefined>(undefined)
    const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
    const [connectLoading, setConnectLoading] = useState<boolean>(false)
@@ -19,25 +20,30 @@ export default function Header() {
    const ethereum = getMetamask()
 
    useEffect(() => {
+      const web3 = new Web3(ethereum)
+
       async function fetchInitialData() {
+         const currentChainId = Number(await web3.eth.getChainId())
+         const expectedChainId = parseInt(networks[0].chainId, 16)
+
          if (
-            metamask &&
-            walletAddress &&
-            walletAddress !== '' &&
-            chainId &&
-            networks[0] &&
-            chainId === networks[0].chainId
+            useStore.getState().metamask &&
+            useStore.getState().walletAddress !== '' &&
+            currentChainId === expectedChainId
          ) {
             const donutCount = await donutBalances(
-               { address: walletAddress },
+               { address: useStore.getState().walletAddress },
                { loading: setBalanceLoading }
             )
             setUserBalance(Number(donutCount))
+         } else if (currentChainId !== expectedChainId) {
+            setChainId('')
+            await disconnectWallet({})
          }
       }
 
       fetchInitialData()
-   }, [metamask, walletAddress, update, ethereum, chainId])
+   }, [metamask, walletAddress, update, ethereum, chainId, setChainId])
 
    return (
       <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">

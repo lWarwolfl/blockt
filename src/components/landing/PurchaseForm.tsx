@@ -96,7 +96,7 @@ export function PurchaseForm() {
                Donut Vending Machine
                <span className="ml-auto inline-flex items-center gap-2">
                   {isOwnerLoading ? (
-                     <Icon icon="line-md:loading-twotone-loop" className="absolute text-lg" />
+                     <Icon icon="line-md:loading-twotone-loop" className="text-lg" />
                   ) : isOwner ? (
                      <>
                         <Button variant="outline" size="icon" asChild>
