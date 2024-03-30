@@ -9,7 +9,7 @@ export default function Footer() {
 
          <div className="flex w-full max-w-5xl items-center justify-center gap-2 text-center font-mono text-sm">
             Developed by
-            <a href="https://github.com/lWarwolfl" target="_blank" className="flex items-center">
+            <a href="https://github.com/lWarwolfl/blockt" target="_blank" className="flex items-center">
                <Icon icon="bxl:github" className="text-lg" />
                lWarwolfl
             </a>
