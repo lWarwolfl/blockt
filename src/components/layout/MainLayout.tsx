@@ -6,6 +6,7 @@ import { WebGLParticles } from '@/components/utils/Particles'
 import { WalletDownload } from '@/components/utils/WalletDownload'
 import { getErrorMessage } from '@/lib/error'
 import { useStore } from '@/lib/store'
+import useMobileDetect from '@/lib/useMobileDetect'
 import { cn } from '@/lib/utils'
 import checkNetwork from '@/lib/web3/checkNetwork'
 import { getMetamask } from '@/lib/web3/provider'
@@ -26,11 +27,13 @@ interface Props {
 }
 
 const ParticleDark = () => {
-   return <WebGLParticles color="rgb(235,233,232)" />
+   const isMobile = useMobileDetect()
+   return <WebGLParticles color="rgb(235,233,232)" size={isMobile ? 260 : 200} />
 }
 
 const ParticleLight = () => {
-   return <WebGLParticles color="rgb(182,177,174)" count={80} size={200} />
+   const isMobile = useMobileDetect()
+   return <WebGLParticles color="rgb(182,177,174)" size={isMobile ? 280 : 220} />
 }
 
 export default function MainLayout({ children }: Props) {
