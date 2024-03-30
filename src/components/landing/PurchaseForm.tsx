@@ -79,12 +79,12 @@ export function PurchaseForm() {
       fetchInitialData()
    }, [metamask, update])
 
-   async function fetchInitialData() {
+   async function fetchInitialData(loading: boolean = true) {
       if (useStore.getState().metamask && useStore.getState().walletAddress !== '') {
          const userWalletBalanceTemp = await walletBalance(
             { address: useStore.getState().walletAddress },
             {
-               loading: setUserWalletBalanceLoading,
+               loading: loading ? setUserWalletBalanceLoading : undefined,
             }
          )
          setUserWalletBalance(Number(userWalletBalanceTemp))
@@ -93,7 +93,9 @@ export function PurchaseForm() {
       }
    }
 
-   setInterval(fetchInitialData, 15000)
+   useEffect(() => {
+      setInterval(() => fetchInitialData(false), 15000)
+   }, [])
 
    useEffect(() => {
       fetchInitialData()

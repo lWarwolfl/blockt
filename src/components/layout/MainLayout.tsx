@@ -105,7 +105,12 @@ export default function MainLayout({ children }: Props) {
             <ParticleLight />
          )}
 
-         <main className={cn('flex h-dvh flex-col items-center p-6 lg:p-24', font.className)}>
+         <main
+            className={cn(
+               'flex h-dvh min-h-fit flex-col items-center gap-6 p-6 lg:p-24',
+               font.className
+            )}
+         >
             <Header />
             {metamask ? network ? children : <ChangeNetwork /> : <WalletDownload />}
             <Footer />
