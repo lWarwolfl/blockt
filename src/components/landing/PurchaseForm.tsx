@@ -39,11 +39,9 @@ export function PurchaseForm() {
    const [transactionLoading, setTransactionLoading] = useState<boolean>(false)
    const [vendingMachineBalanceLoading, setVendingMachineBalanceLoading] = useState<boolean>(false)
    const [vendingMachineBalance, setVendingMachineBalance] = useState<number>(0)
-   const [isOwnerLoading, setIsOwnerLoading] = useState<boolean>(false)
-   const [isOwner, setIsOwner] = useState<boolean>(false)
    const [userWalletBalanceLoading, setUserWalletBalanceLoading] = useState<boolean>(false)
-   const [userWalletBalance, setUserWalletBalance] = useState<number>(0)
-
+   const [userWalletBalance, setUserWalletBalance] = useState<number | undefined>(undefined)
+   const [isOwner, setIsOwner] = useState<boolean>(false)
    const [totalCost, setTotalCost] = useState<number>(0)
 
    const form = useForm<z.infer<typeof formSchema>>({
@@ -75,24 +73,36 @@ export function PurchaseForm() {
                loading: setVendingMachineBalanceLoading,
             })
             setVendingMachineBalance(Number(balanceTemp))
-
-            const userWalletBalanceTemp = await walletBalance(
-               { address: useStore.getState().walletAddress },
-               {
-                  loading: setUserWalletBalanceLoading,
-               }
-            )
-            setUserWalletBalance(Number(userWalletBalanceTemp))
          }
       }
 
       fetchInitialData()
    }, [metamask, update])
 
+   async function fetchInitialData() {
+      if (useStore.getState().metamask && useStore.getState().walletAddress !== '') {
+         const userWalletBalanceTemp = await walletBalance(
+            { address: useStore.getState().walletAddress },
+            {
+               loading: setUserWalletBalanceLoading,
+            }
+         )
+         setUserWalletBalance(Number(userWalletBalanceTemp))
+      } else {
+         setUserWalletBalance(undefined)
+      }
+   }
+
+   setInterval(fetchInitialData, 15000)
+
+   useEffect(() => {
+      fetchInitialData()
+   }, [metamask, update, walletAddress])
+
    useEffect(() => {
       async function fetchOwner() {
          if (useStore.getState().metamask && useStore.getState().walletAddress !== '') {
-            const ownerAddress = await owner({ loading: setIsOwnerLoading })
+            const ownerAddress = await owner({})
 
             if (useStore.getState().walletAddress === String(ownerAddress)) setIsOwner(true)
          } else if (useStore.getState().walletAddress === '') {
@@ -110,9 +120,7 @@ export function PurchaseForm() {
                <Icon icon="solar:donut-line-duotone" className="mr-1 align-middle text-2xl" />
                Donut Vending Machine
                <span className="ml-auto inline-flex items-center gap-2">
-                  {isOwnerLoading ? (
-                     <Icon icon="line-md:loading-twotone-loop" className="text-lg" />
-                  ) : isOwner ? (
+                  {isOwner ? (
                      <>
                         <Button variant="outline" size="icon" asChild>
                            <Link href="/withdraw">
@@ -136,6 +144,19 @@ export function PurchaseForm() {
                   <span className="text-card-foreground">{vendingMachineBalance}</span>
                )}{' '}
                Remaining donuts in the machine
+               {userWalletBalance && userWalletBalance < costPerDonut ? (
+                  <>
+                     . If you needed MATIC for testing you can get it from this{' '}
+                     <Link
+                        href="https://faucet.polygon.technology/"
+                        target="_blank"
+                        className="cursor-pointer text-card-foreground underline-offset-2 hover:underline"
+                     >
+                        faucet
+                        <Icon icon="ic:outline-water-drop" className="ml-1 align-middle text-lg" />
+                     </Link>
+                  </>
+               ) : null}
             </CardDescription>
          </CardHeader>
          <CardContent className="-mt-2">
@@ -169,7 +190,8 @@ export function PurchaseForm() {
                               Total cost:{' '}
                               <span
                                  className={cn('text-card-foreground', {
-                                    ['text-destructive']: totalCost > userWalletBalance,
+                                    ['text-destructive']:
+                                       userWalletBalance && totalCost > userWalletBalance,
                                  })}
                               >
                                  {totalCost.toFixed(4)}
@@ -185,11 +207,11 @@ export function PurchaseForm() {
                                     />
                                  ) : (
                                     <span className="text-card-foreground">
-                                       {userWalletBalance.toFixed(4)}
+                                       {userWalletBalance?.toFixed(4)}
                                     </span>
                                  )}
                               </span>{' '}
-                              MATIC
+                              {userWalletBalance ? 'MATIC' : 'Please connect your wallet'}
                            </FormDescription>
                            <FormMessage />
                         </FormItem>
@@ -207,7 +229,7 @@ export function PurchaseForm() {
                   vendingMachineBalance <= 0 ||
                   !walletAddress ||
                   walletAddress === '' ||
-                  totalCost > userWalletBalance
+                  totalCost > (userWalletBalance ? userWalletBalance : 0)
                }
                className="gap-1.5"
             >
