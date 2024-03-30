@@ -4,7 +4,6 @@ import getBalance from '@/lib/methods/getBalance'
 import owner from '@/lib/methods/owner'
 import withdraw from '@/lib/methods/withdraw'
 import { useStore } from '@/lib/store'
-import { networks } from '@/lib/web3/networks'
 import { Icon } from '@iconify-icon/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -16,6 +15,7 @@ export function WithdrawForm() {
    const { walletAddress, metamask, rerender, rerenderNow } = useStore()
    const [transactionLoading, setTransactionLoading] = useState<boolean>(false)
    const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
+   const [balance, setBalance] = useState<number>(0)
 
    async function submit() {
       const response = await withdraw(
@@ -26,11 +26,9 @@ export function WithdrawForm() {
       if (response) rerenderNow()
    }
 
-   const [balance, setBalance] = useState<number>(0)
-
    useEffect(() => {
       async function fetchInitialData() {
-         if (metamask) {
+         if (useStore.getState().metamask) {
             const balanceTemp = await getBalance({ loading: setBalanceLoading })
             setBalance(Number(balanceTemp))
          }
@@ -41,7 +39,7 @@ export function WithdrawForm() {
 
    useEffect(() => {
       async function fetchOwner() {
-         if (metamask && useStore.getState().walletAddress !== '') {
+         if (useStore.getState().metamask && useStore.getState().walletAddress !== '') {
             const ownerAddress = await owner({})
 
             if (useStore.getState().walletAddress !== String(ownerAddress)) router.push('/')
@@ -70,21 +68,17 @@ export function WithdrawForm() {
                {balanceLoading ? (
                   <Icon icon="line-md:loading-twotone-loop" className="align-middle text-2xl" />
                ) : (
-                  balance /
-                  (networks[0]
-                     ? Math.pow(10, networks[0].nativeCurrency.decimals)
-                     : Math.pow(10, 18))
-               )}{' '}
-               MATIC
+                  <>
+                     <span className="text-card-foreground">{balance}</span> MATIC
+                  </>
+               )}
             </CardDescription>
          </CardHeader>
          <CardFooter className="mt-2 flex justify-between">
             <Button
                onClick={() => submit()}
                type="submit"
-               disabled={
-                  !metamask || !walletAddress || walletAddress === '' || !balance || balance <= 0
-               }
+               disabled={!walletAddress || walletAddress === '' || !balance || balance <= 0}
                className="gap-1.5"
             >
                Withdraw

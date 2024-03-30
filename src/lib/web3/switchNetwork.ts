@@ -1,6 +1,5 @@
 import { getErrorMessage } from '@/lib/error'
 import { type AsyncFunctionInterface, type NetworkInterface } from '@/lib/interfaces'
-import { useStore } from '@/lib/store'
 import { networks } from '@/lib/web3/networks'
 import { getMetamask } from '@/lib/web3/provider'
 import toast from 'react-hot-toast'
@@ -21,12 +20,12 @@ export default async function switchNetwork(params: Props, { loading }: AsyncFun
             params: [network],
          })
 
-         useStore.getState().setChainId(network.chainId)
          loading?.(false)
          return response
       }
    } catch (error) {
       loading?.(false)
       toast.error(getErrorMessage(error))
+      return false
    }
 }

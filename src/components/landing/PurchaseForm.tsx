@@ -21,6 +21,8 @@ import getVendingMachineBalance from '@/lib/methods/getVendingMachineBalance'
 import owner from '@/lib/methods/owner'
 import purchase, { costPerDonut } from '@/lib/methods/purchase'
 import { useStore } from '@/lib/store'
+import { cn } from '@/lib/utils'
+import { walletBalance } from '@/lib/web3/wallet'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@iconify-icon/react'
 import Link from 'next/link'
@@ -35,9 +37,14 @@ const formSchema = z.object({
 export function PurchaseForm() {
    const { walletAddress, metamask, update, updateNow } = useStore()
    const [transactionLoading, setTransactionLoading] = useState<boolean>(false)
-   const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
+   const [vendingMachineBalanceLoading, setVendingMachineBalanceLoading] = useState<boolean>(false)
+   const [vendingMachineBalance, setVendingMachineBalance] = useState<number>(0)
    const [isOwnerLoading, setIsOwnerLoading] = useState<boolean>(false)
    const [isOwner, setIsOwner] = useState<boolean>(false)
+   const [userWalletBalanceLoading, setUserWalletBalanceLoading] = useState<boolean>(false)
+   const [userWalletBalance, setUserWalletBalance] = useState<number>(0)
+
+   const [totalCost, setTotalCost] = useState<number>(0)
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
@@ -45,8 +52,6 @@ export function PurchaseForm() {
          amount: undefined,
       },
    })
-
-   const [totalCost, setTotalCost] = useState<number>(0)
 
    async function onSubmit(values: z.infer<typeof formSchema>) {
       const response = await purchase(
@@ -63,13 +68,21 @@ export function PurchaseForm() {
       setTotalCost(cost)
    })
 
-   const [vendingMachineBalance, setVendingMachineBalance] = useState<number>(0)
-
    useEffect(() => {
       async function fetchInitialData() {
-         if (metamask) {
-            const balanceTemp = await getVendingMachineBalance({ loading: setBalanceLoading })
+         if (useStore.getState().metamask) {
+            const balanceTemp = await getVendingMachineBalance({
+               loading: setVendingMachineBalanceLoading,
+            })
             setVendingMachineBalance(Number(balanceTemp))
+
+            const userWalletBalanceTemp = await walletBalance(
+               { address: useStore.getState().walletAddress },
+               {
+                  loading: setUserWalletBalanceLoading,
+               }
+            )
+            setUserWalletBalance(Number(userWalletBalanceTemp))
          }
       }
 
@@ -117,12 +130,12 @@ export function PurchaseForm() {
                </span>
             </CardTitle>
             <CardDescription>
-               {balanceLoading ? (
+               {vendingMachineBalanceLoading ? (
                   <Icon icon="line-md:loading-twotone-loop" className="align-middle text-2xl" />
                ) : (
-                  vendingMachineBalance
+                  <span className="text-card-foreground">{vendingMachineBalance}</span>
                )}{' '}
-               Remaining update in the machine
+               Remaining donuts in the machine
             </CardDescription>
          </CardHeader>
          <CardContent className="-mt-2">
@@ -147,8 +160,36 @@ export function PurchaseForm() {
                               />
                            </FormControl>
                            <FormDescription>
-                              1 Donut = {costPerDonut} MATIC <br />
-                              Total cost: {totalCost.toFixed(2)} MATIC
+                              <span className="text-card-foreground">1</span> Donut ={' '}
+                              <span className="text-card-foreground">
+                                 {costPerDonut.toFixed(4)}
+                              </span>{' '}
+                              MATIC
+                              <br />
+                              Total cost:{' '}
+                              <span
+                                 className={cn('text-card-foreground', {
+                                    ['text-destructive']: totalCost > userWalletBalance,
+                                 })}
+                              >
+                                 {totalCost.toFixed(4)}
+                              </span>{' '}
+                              MATIC
+                              <br />
+                              Your balance:{' '}
+                              <span className="text-card-foreground">
+                                 {userWalletBalanceLoading ? (
+                                    <Icon
+                                       icon="line-md:loading-twotone-loop"
+                                       className="align-middle text-2xl"
+                                    />
+                                 ) : (
+                                    <span className="text-card-foreground">
+                                       {userWalletBalance.toFixed(4)}
+                                    </span>
+                                 )}
+                              </span>{' '}
+                              MATIC
                            </FormDescription>
                            <FormMessage />
                         </FormItem>
@@ -162,11 +203,11 @@ export function PurchaseForm() {
                onClick={form.handleSubmit(onSubmit)}
                type="submit"
                disabled={
-                  !metamask ||
                   totalCost === 0 ||
                   vendingMachineBalance <= 0 ||
                   !walletAddress ||
-                  walletAddress === ''
+                  walletAddress === '' ||
+                  totalCost > userWalletBalance
                }
                className="gap-1.5"
             >

@@ -3,13 +3,15 @@ import CopyToClipboard from '@/components/utils/CopyToClipboard'
 import { ThemeToggle } from '@/components/utils/ThemeToggle'
 import donutBalances from '@/lib/methods/donutBalances'
 import { useStore } from '@/lib/store'
-import checkNetwork from '@/lib/web3/checkNetwork'
+import useMobileDetect from '@/lib/useMobileDetect'
 import { connectWallet, disconnectWallet } from '@/lib/web3/wallet'
 import { Icon } from '@iconify-icon/react'
 import { useEffect, useState } from 'react'
 
 export default function Header() {
-   const { walletAddress, metamask, update, chainId } = useStore()
+   const isMobile = useMobileDetect()
+
+   const { walletAddress, metamask, update, network } = useStore()
    const [userBalance, setUserBalance] = useState<number | undefined>(undefined)
    const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
    const [connectLoading, setConnectLoading] = useState<boolean>(false)
@@ -17,22 +19,23 @@ export default function Header() {
 
    useEffect(() => {
       async function fetchInitialData() {
-         const network = await checkNetwork({})
-
-         if (useStore.getState().metamask && useStore.getState().walletAddress !== '' && network) {
+         if (
+            useStore.getState().metamask &&
+            useStore.getState().walletAddress !== '' &&
+            useStore.getState().network
+         ) {
             const donutCount = await donutBalances(
                { address: useStore.getState().walletAddress },
                { loading: setBalanceLoading }
             )
             setUserBalance(Number(donutCount))
-         } else if (!network) {
-            useStore.getState().setChainId('')
-            await disconnectWallet({})
+         } else if (!useStore.getState().network) {
+            setUserBalance(undefined)
          }
       }
 
       fetchInitialData()
-   }, [metamask, walletAddress, update, chainId])
+   }, [metamask, walletAddress, update, network])
 
    return (
       <div className="z-10 mb-6 flex w-full max-w-5xl items-center justify-between">
@@ -41,17 +44,19 @@ export default function Header() {
 
             {walletAddress !== '' ? (
                <>
-                  <Button
-                     onClick={() => disconnectWallet({ loading: setDisconnectLoading })}
-                     variant="outline"
-                     size="icon"
-                  >
-                     {disconnectLoading ? (
-                        <Icon icon="line-md:loading-twotone-loop" className="absolute text-lg" />
-                     ) : (
-                        <Icon icon="line-md:logout" className="absolute text-lg" />
-                     )}
-                  </Button>
+                  {isMobile ? null : (
+                     <Button
+                        onClick={() => disconnectWallet({ loading: setDisconnectLoading })}
+                        variant="outline"
+                        size="icon"
+                     >
+                        {disconnectLoading ? (
+                           <Icon icon="line-md:loading-twotone-loop" className="absolute text-lg" />
+                        ) : (
+                           <Icon icon="line-md:logout" className="absolute text-lg" />
+                        )}
+                     </Button>
+                  )}
 
                   <CopyToClipboard
                      className=" ml-auto sm:ml-0"

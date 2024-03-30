@@ -1,14 +1,14 @@
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
+import { ChangeNetwork } from '@/components/utils/ChangeNetwork'
 import CustomHead from '@/components/utils/CustomHead'
 import { WebGLParticles } from '@/components/utils/Particles'
 import { WalletDownload } from '@/components/utils/WalletDownload'
 import { getErrorMessage } from '@/lib/error'
 import { useStore } from '@/lib/store'
+import { cn } from '@/lib/utils'
 import checkNetwork from '@/lib/web3/checkNetwork'
 import { getMetamask } from '@/lib/web3/provider'
-import { disconnectWallet } from '@/lib/web3/wallet'
-import clsx from 'clsx'
 import { useTheme } from 'next-themes'
 import { Poppins } from 'next/font/google'
 import { useEffect } from 'react'
@@ -37,7 +37,7 @@ export default function MainLayout({ children }: Props) {
    const theme = useTheme().theme
    const themeSystem = useTheme().systemTheme
 
-   const { walletAddress, metamask, chainId } = useStore()
+   const { walletAddress, metamask, network } = useStore()
 
    useEffect(() => {
       const ethereum = getMetamask()
@@ -51,11 +51,11 @@ export default function MainLayout({ children }: Props) {
             try {
                const accounts = await web3.eth.getAccounts()
                const network = await checkNetwork({})
+               useStore.getState().setNetwork(network)
 
                if (accounts[0]) {
                   if (network) {
                      useStore.getState().setWalletAddress(accounts[0])
-                     useStore.getState().setChainId(ethereum.chainId)
                   }
                } else if (useStore.getState().walletAddress !== '') {
                   useStore.getState().setWalletAddress('')
@@ -70,11 +70,7 @@ export default function MainLayout({ children }: Props) {
 
          const handleNetworkChange = async () => {
             const network = await checkNetwork({})
-
-            if (!network) {
-               useStore.getState().setChainId('')
-               await disconnectWallet({})
-            }
+            useStore.getState().setNetwork(network)
          }
 
          handleNetworkChange()
@@ -89,9 +85,10 @@ export default function MainLayout({ children }: Props) {
       } else {
          useStore.getState().setMetamask(false)
          useStore.getState().setWalletAddress('')
+         useStore.getState().setNetwork(false)
          toast.error('MetaMask is not installed.')
       }
-   }, [walletAddress, chainId])
+   }, [walletAddress])
 
    return (
       <>
@@ -108,9 +105,9 @@ export default function MainLayout({ children }: Props) {
             <ParticleLight />
          )}
 
-         <main className={clsx('flex h-dvh flex-col items-center p-6 lg:p-24', font.className)}>
+         <main className={cn('flex h-dvh flex-col items-center p-6 lg:p-24', font.className)}>
             <Header />
-            {metamask ? children : <WalletDownload />}
+            {metamask ? network ? children : <ChangeNetwork /> : <WalletDownload />}
             <Footer />
          </main>
       </>

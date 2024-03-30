@@ -37,7 +37,8 @@ export function RestockForm() {
 
    const { walletAddress, metamask, update, updateNow } = useStore.getState()
    const [transactionLoading, setTransactionLoading] = useState<boolean>(false)
-   const [balanceLoading, setBalanceLoading] = useState<boolean>(false)
+   const [vendingMachineBalanceLoading, setVendingMachineBalanceLoading] = useState<boolean>(false)
+   const [vendingMachineBalance, setVendingMachineBalance] = useState<number>(0)
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
@@ -61,12 +62,12 @@ export function RestockForm() {
       setCount(Number(value.amount))
    })
 
-   const [vendingMachineBalance, setVendingMachineBalance] = useState<number>(0)
-
    useEffect(() => {
       async function fetchInitialData() {
-         if (metamask) {
-            const balanceTemp = await getVendingMachineBalance({ loading: setBalanceLoading })
+         if (useStore.getState().metamask) {
+            const balanceTemp = await getVendingMachineBalance({
+               loading: setVendingMachineBalanceLoading,
+            })
             setVendingMachineBalance(Number(balanceTemp))
          }
       }
@@ -76,7 +77,7 @@ export function RestockForm() {
 
    useEffect(() => {
       async function fetchOwner() {
-         if (metamask && useStore.getState().walletAddress !== '') {
+         if (useStore.getState().metamask && useStore.getState().walletAddress !== '') {
             const ownerAddress = await owner({})
 
             if (useStore.getState().walletAddress !== String(ownerAddress)) router.push('/')
@@ -101,10 +102,10 @@ export function RestockForm() {
                </span>
             </CardTitle>
             <CardDescription>
-               {balanceLoading ? (
+               {vendingMachineBalanceLoading ? (
                   <Icon icon="line-md:loading-twotone-loop" className="align-middle text-2xl" />
                ) : (
-                  vendingMachineBalance
+                  <span className="text-card-foreground">{vendingMachineBalance}</span>
                )}{' '}
                Remaining update in the machine
             </CardDescription>
@@ -141,9 +142,7 @@ export function RestockForm() {
             <Button
                onClick={form.handleSubmit(onSubmit)}
                type="submit"
-               disabled={
-                  !metamask || !walletAddress || walletAddress === '' || !count || count <= 0
-               }
+               disabled={!walletAddress || walletAddress === '' || !count || count <= 0}
                className="gap-1.5"
             >
                Restock

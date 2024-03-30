@@ -6,12 +6,12 @@ interface StoreState {
    metamask: boolean
    update: number
    rerender: number
-   chainId: string
+   network: boolean
    setWalletAddress: (walletAddress: string) => void
    setMetamask: (metamask: boolean) => void
    updateNow: () => void
    rerenderNow: () => void
-   setChainId: (chainId: string) => void
+   setNetwork: (network: boolean) => void
 }
 
 export const useStore = create(
@@ -21,12 +21,12 @@ export const useStore = create(
          metamask: false,
          update: 0,
          rerender: 0,
-         chainId: '',
+         network: false,
          setWalletAddress: (walletAddress) => set({ walletAddress: walletAddress }),
          setMetamask: (metamask) => set({ metamask: metamask }),
          updateNow: () => set({ update: get().update + 1 }),
          rerenderNow: () => set({ rerender: get().rerender + 1 }),
-         setChainId: (chainId) => set({ chainId: chainId }),
+         setNetwork: (network) => set({ network: network }),
       }),
       {
          name: 'blockt',
