@@ -3,15 +3,32 @@ import { type AsyncFunctionInterface, type NetworkInterface } from '@/lib/interf
 import { networks } from '@/lib/web3/networks'
 import { getMetamask } from '@/lib/web3/provider'
 import toast from 'react-hot-toast'
+import Web3 from 'web3'
 
 const ethereum = getMetamask()
-interface Props {
-   network?: NetworkInterface
+
+async function checkNetwork({ loading }: AsyncFunctionInterface) {
+   try {
+      loading?.(true)
+      const web3 = new Web3(ethereum)
+      const currentChainId = Number(await web3.eth.getChainId())
+      const expectedChainId = parseInt(networks[0].chainId, 16)
+      return currentChainId === expectedChainId
+   } catch (error) {
+      loading?.(false)
+      toast.error(getErrorMessage(error))
+      return false
+   }
 }
 
-export default async function switchNetwork(params: Props, { loading }: AsyncFunctionInterface) {
-   const { network = networks[0] } = params
-
+async function switchNetwork(
+   {
+      network = networks[0],
+   }: {
+      network?: NetworkInterface
+   },
+   { loading }: AsyncFunctionInterface
+) {
    try {
       loading?.(true)
       if (ethereum) {
@@ -29,3 +46,5 @@ export default async function switchNetwork(params: Props, { loading }: AsyncFun
       return false
    }
 }
+
+export { checkNetwork, switchNetwork }

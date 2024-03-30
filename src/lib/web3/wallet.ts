@@ -1,13 +1,13 @@
 import { getErrorMessage } from '@/lib/error'
 import { type AsyncFunctionInterface } from '@/lib/interfaces'
+import { switchNetwork } from '@/lib/web3/network'
 import { getMetamask } from '@/lib/web3/provider'
-import switchNetwork from '@/lib/web3/switchNetwork'
 import toast from 'react-hot-toast'
 import Web3 from 'web3'
 
 const ethereum = getMetamask()
 
-const connectWallet = async ({ loading }: AsyncFunctionInterface) => {
+async function connectWallet({ loading }: AsyncFunctionInterface) {
    try {
       if (ethereum) {
          loading?.(true)
@@ -25,10 +25,10 @@ const connectWallet = async ({ loading }: AsyncFunctionInterface) => {
    }
 }
 
-const walletBalance = async (
+async function walletBalance(
    { address }: { address: string },
    { loading }: AsyncFunctionInterface
-) => {
+) {
    try {
       loading?.(true)
       const web3 = new Web3(ethereum)
@@ -43,7 +43,7 @@ const walletBalance = async (
 }
 
 //experimental feature and currently only works with the extension
-const disconnectWallet = async ({ loading }: AsyncFunctionInterface) => {
+async function disconnectWallet({ loading }: AsyncFunctionInterface) {
    try {
       if (ethereum) {
          loading?.(true)

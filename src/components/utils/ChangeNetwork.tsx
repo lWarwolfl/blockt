@@ -7,7 +7,7 @@ import {
    CardHeader,
    CardTitle,
 } from '@/components/ui/card'
-import switchNetwork from '@/lib/web3/switchNetwork'
+import { switchNetwork } from '@/lib/web3/network'
 import { Icon } from '@iconify-icon/react'
 import { useState } from 'react'
 
