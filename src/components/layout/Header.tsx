@@ -3,12 +3,10 @@ import CopyToClipboard from '@/components/utils/CopyToClipboard'
 import { ThemeToggle } from '@/components/utils/ThemeToggle'
 import donutBalances from '@/lib/methods/donutBalances'
 import { useStore } from '@/lib/store'
-import { networks } from '@/lib/web3/networks'
-import { getMetamask } from '@/lib/web3/provider'
+import checkNetwork from '@/lib/web3/checkNetwork'
 import { connectWallet, disconnectWallet } from '@/lib/web3/wallet'
 import { Icon } from '@iconify-icon/react'
 import { useEffect, useState } from 'react'
-import Web3 from 'web3'
 
 export default function Header() {
    const { walletAddress, metamask, update, chainId } = useStore()
@@ -18,24 +16,16 @@ export default function Header() {
    const [disconnectLoading, setDisconnectLoading] = useState<boolean>(false)
 
    useEffect(() => {
-      const ethereum = getMetamask()
-      const web3 = new Web3(ethereum)
-
       async function fetchInitialData() {
-         const currentChainId = Number(await web3.eth.getChainId())
-         const expectedChainId = parseInt(networks[0].chainId, 16)
+         const network = await checkNetwork({})
 
-         if (
-            useStore.getState().metamask &&
-            useStore.getState().walletAddress !== '' &&
-            currentChainId === expectedChainId
-         ) {
+         if (useStore.getState().metamask && useStore.getState().walletAddress !== '' && network) {
             const donutCount = await donutBalances(
                { address: useStore.getState().walletAddress },
                { loading: setBalanceLoading }
             )
             setUserBalance(Number(donutCount))
-         } else if (currentChainId !== expectedChainId) {
+         } else if (!network) {
             useStore.getState().setChainId('')
             await disconnectWallet({})
          }

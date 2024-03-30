@@ -5,7 +5,7 @@ import { WebGLParticles } from '@/components/utils/Particles'
 import { WalletDownload } from '@/components/utils/WalletDownload'
 import { getErrorMessage } from '@/lib/error'
 import { useStore } from '@/lib/store'
-import { networks } from '@/lib/web3/networks'
+import checkNetwork from '@/lib/web3/checkNetwork'
 import { getMetamask } from '@/lib/web3/provider'
 import { disconnectWallet } from '@/lib/web3/wallet'
 import clsx from 'clsx'
@@ -50,11 +50,10 @@ export default function MainLayout({ children }: Props) {
          const handleAccountChange = async () => {
             try {
                const accounts = await web3.eth.getAccounts()
-               const currentChainId = Number(await web3.eth.getChainId())
-               const expectedChainId = parseInt(networks[0].chainId, 16)
+               const network = await checkNetwork({})
 
                if (accounts[0]) {
-                  if (currentChainId === expectedChainId) {
+                  if (network) {
                      useStore.getState().setWalletAddress(accounts[0])
                      useStore.getState().setChainId(ethereum.chainId)
                   }
@@ -70,10 +69,9 @@ export default function MainLayout({ children }: Props) {
          handleAccountChange()
 
          const handleNetworkChange = async () => {
-            const currentChainId = Number(await web3.eth.getChainId())
-            const expectedChainId = parseInt(networks[0].chainId, 16)
+            const network = await checkNetwork({})
 
-            if (currentChainId !== expectedChainId) {
+            if (!network) {
                useStore.getState().setChainId('')
                await disconnectWallet({})
             }

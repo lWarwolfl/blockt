@@ -23,6 +23,7 @@ const connectWallet = async ({ loading }: AsyncFunctionInterface) => {
    }
 }
 
+//experimental feature and currently only works with the extension
 const disconnectWallet = async ({ loading }: AsyncFunctionInterface) => {
    try {
       if (ethereum) {
