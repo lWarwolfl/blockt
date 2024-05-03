@@ -17,11 +17,11 @@ export default function CustomHead(props: CustomHeadProps) {
    const seo = {
       title: 'BlockT - A Web3 Platform To Buy Tasty Donuts',
       description:
-         'My goal is to work with web3 to connect to smart contracts and send transactions on Polygon Mumbai testnet in this project and maybe buy some Donuts!',
+         'My goal is to work with web3 to connect to smart contracts and send transactions on a Polygon testnet in this project and maybe buy some Donuts!',
       url: router.asPath,
       image: preview.src,
       twitterCardType: 'summary',
-      keywords: ['Sina', 'Kheiri', 'BlockT', 'Web3', 'Blockchain', 'Polygon', 'Mumbai'],
+      keywords: ['Sina', 'Kheiri', 'BlockT', 'Web3', 'Blockchain', 'Polygon', 'Amoy'],
       ...props,
    } satisfies CustomHeadProps
 

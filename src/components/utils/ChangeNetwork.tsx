@@ -22,12 +22,12 @@ export function ChangeNetwork() {
                Please switch your network
             </CardTitle>
             <CardDescription>
-               BlockT Dapp currently works on Polygon Mumbai testnet only.
+               BlockT Dapp currently works on Polygon Amoy testnet only.
             </CardDescription>
          </CardHeader>
          <CardContent className="text-sm">
             You can switch your network manually or use the button below to connect to Polygon{' '}
-            Mumbai testnet automatically.
+            Amoy testnet automatically.
          </CardContent>
          <CardFooter className="pt-2">
             <Button
@@ -35,7 +35,7 @@ export function ChangeNetwork() {
                variant="secondary"
                onClick={() => switchNetwork({}, { loading: setNetworkLoading })}
             >
-               Connect to Polygon Mumbai
+               Connect To Network
                {networkLoading ? (
                   <Icon icon="line-md:loading-twotone-loop" className="align-middle text-2xl" />
                ) : (

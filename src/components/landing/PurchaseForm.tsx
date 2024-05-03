@@ -150,7 +150,7 @@ export function PurchaseForm() {
                   <>
                      . If you needed MATIC for testing you can get it from this{' '}
                      <Link
-                        href="https://faucet.polygon.technology/"
+                        href="https://www.alchemy.com/faucets/polygon-amoy"
                         target="_blank"
                         className="cursor-pointer text-card-foreground underline-offset-2 hover:underline"
                      >

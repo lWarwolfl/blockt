@@ -1,4 +1,4 @@
-export const VendingmachineAddress = '0xC8be6E33495f7FeBd224d38782BFB526642cCf9C'
+export const VendingmachineAddress = '0xbaA11FAF04e9e8A7FeCe9B574D8eFF1518386A68'
 
 export const vendingMachineABI = [
    {

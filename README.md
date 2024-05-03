@@ -1,6 +1,6 @@
 # BlockT
 
-BlockT is a seamless Dapp that utilizes Web3, connects to Smart contracts and sends transactions on Polygon Mumbai testnet.
+BlockT is a seamless Dapp that utilizes Web3, connects to Smart contracts and sends transactions on Polygon Amoy testnet.
 
 ## Features
 
