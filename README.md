@@ -45,7 +45,7 @@ To get started with BlockT, follow these steps:
 The project's directory structure is as follows:
 
 ```
-portfonext/
+blockt/
   ├── src/
     ├── components/        # Project components
     ├── components/utils   # Reusable components
