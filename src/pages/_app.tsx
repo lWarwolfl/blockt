@@ -3,7 +3,6 @@ import { CustomToast } from '@/components/utils/CustomToast'
 import { ThemeProvider } from '@/components/utils/ThemeProvider'
 import '@/styles/globals.css'
 import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { AppProps } from 'next/app'
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
@@ -35,7 +34,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
    return (
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-         <SpeedInsights />
          <Analytics />
          <Toaster position="bottom-center" reverseOrder={false}>
             {(t) => {
